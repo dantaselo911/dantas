@@ -398,7 +398,7 @@
         panel.className = "khz-panel";
         panel.innerHTML = `
           <div class="khz-header">
-            <div class="khz-title">MoonScripts™</div>
+            <div class="khz-title">Dantas 2b™</div>
             <div class="khz-version">DESCONTINUADA</div>
           </div>
           <div class="khz-tabs">
@@ -525,4 +525,5 @@
     }, 2000);
   })();
 })();
+
 
