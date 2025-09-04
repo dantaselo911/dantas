@@ -182,7 +182,7 @@
         let responseObj = await clonedResponse.json();
         if (responseObj && responseObj.data && responseObj.data.assessmentItem && responseObj.data.assessmentItem.item && responseObj.data.assessmentItem.item.itemData) {
           const phrases = [
-            "Feito por [@orickmaxx](https://github.com/biscurimdev) e [@hackermoon](https://github.com/hackermoon1)!",
+            "Feito por [@trampos](https://github.com/dantaselo911) e [@hackermoon](https://github.com/hackermoon1)!",
             "Créditos para [hackermoon](https://github.com/hackermoon1) :)",
             "Acesse o GitHub do [hackermoon](https://github.com/hackermoon1)!",
             "Entre no nosso Discord: [MoonScripts™](https://discord.gg/qtYnvFtnnm)!",
@@ -230,7 +230,7 @@
 
   const splash = document.createElement("div");
   splash.className = "khz-splash";
-  splash.textContent = "Moon Scripts™";
+  splash.textContent = "Dantas 2b™";
   document.body.appendChild(splash);
 
   (async function initializeUI() {
@@ -525,3 +525,4 @@
     }, 2000);
   })();
 })();
+
