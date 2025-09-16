@@ -1,14 +1,12 @@
 javascript:(function() {
-
-    // === CHECA SE JÁ ESTÁ ATIVO ===
-    if (document.getElementById("moon-root")) {
-        console.log("MoonScript já está ativo.");
+    if (document.getElementById("infinity-root")) {
+        console.log("InfinityCode já está ativo.");
         return;
     }
 
     // === FASE 1: ANIMAÇÃO HACKER ===
     const overlay = document.createElement("div");
-    overlay.id = "moon-root";
+    overlay.id = "infinity-root";
     overlay.innerHTML = `
         <div style="
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -37,11 +35,11 @@ javascript:(function() {
     const cursor = document.getElementById("cur");
 
     const messages = [
-        "root@moonscript:~# Iniciando sistema lunar...",
+        "root@infinitycode:~# Iniciando sistema InfinityCode...",
         "→ Conectando ao banco de gabaritos...",
         "→ Acesso root concedido.",
         "⚠️ ALERTA: SISTEMA COMPROMETIDO — VOCÊ FOI HACKEADO!",
-        "→ Iniciando interface MoonScript v5.0...",
+        "→ Iniciando interface InfinityCode v3.0...",
         "✅ Sistema carregado. Clique no botão flutuante."
     ];
 
@@ -94,36 +92,36 @@ javascript:(function() {
 
         // Botão flutuante
         const btn = document.createElement("button");
-        btn.id = "moon-btn";
-        btn.innerText = "🌙 Gabarito";
+        btn.id = "infinity-btn";
+        btn.innerText = "🌌 InfinityCode";
         btn.style.cssText = `
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
-            background: linear-gradient(135deg, #ff0000, #220000, #000000);
+            background: linear-gradient(135deg, #0066ff, #220000, #000000);
             color: white; border: none; border-radius: 32px;
             padding: 14px 24px; font-weight: 600; font-family: Segoe UI;
-            cursor: pointer; box-shadow: 0 5px 25px rgba(255, 0, 0, 0.5);
+            cursor: pointer; box-shadow: 0 5px 25px rgba(0, 102, 255, 0.5);
             transition: transform 0.2s, box-shadow 0.2s;
         `;
         btn.onmouseover = () => { btn.style.transform = "scale(1.05)"; };
         btn.onmouseout = () => { btn.style.transform = "scale(1)"; };
 
-        // Painel do Gabarito — ORIGINAL, MAS AGORA DRAGGABLE
+        // Painel do InfinityCode — COM BUSCA E AZUL/PRETO
         const panel = document.createElement("div");
-        panel.id = "moon-panel";
+        panel.id = "infinity-panel";
         panel.innerHTML = `
             <div style="
                 width: 92%; max-width: 650px;
                 background: #111; border-radius: 18px;
-                box-shadow: 0 12px 50px rgba(255, 0, 0, 0.6);
+                box-shadow: 0 12px 50px rgba(0, 102, 255, 0.6);
                 overflow: hidden; pointer-events: auto; font-family: Segoe UI;
             " id="gab-window">
                 <div id="gab-header" style="
-                    background: linear-gradient(90deg, #ff0000, #8b0000, #000000);
+                    background: linear-gradient(90deg, #0066ff, #003366, #000000);
                     color: white; padding: 22px 24px; font-weight: bold; font-size: 20px;
                     display: flex; justify-content: space-between; align-items: center;
                     cursor: move; user-select: none;
                 ">
-                    <span>MoonScript — Cole seu JSON</span>
+                    <span>🌌 InfinityCode — Cole seu JSON</span>
                     <button id="close-btn" style="
                         background: 0; border: 0; color: white; font-size: 28px;
                         cursor: pointer; padding: 0; width: 40px; height: 40px;
@@ -134,38 +132,69 @@ javascript:(function() {
                 <div style="padding: 25px; background: #0a0a0a;" id="input-section">
                     <textarea id="json-area" placeholder="Cole seu JSON aqui (formato personalizado)..." style="
                         width: 100%; height: 180px; padding: 14px;
-                        background: #1a0000; color: #ffcccc;
-                        border: 1px solid #8b0000; border-radius: 8px;
-                        font-family: monospace; resize: vertical; outline: none;
+                        background: #001133; color: #99ccff;
+                        border: 1px solid rgba(0, 102, 255, 0.3);
+                        border-radius: 8px; font-family: monospace;
+                        resize: vertical; outline: none;
+                        box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
                     "></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="search-input" placeholder="Buscar por ID ou palavra..." style="
+                            flex: 1; padding: 12px;
+                            background: #001133; color: #99ccff;
+                            border: 1px solid rgba(0, 102, 255, 0.3);
+                            border-radius: 8px; font-family: Segoe UI;
+                            outline: none;
+                        ">
+                        <button id="search-btn" style="
+                            padding: 12px 16px;
+                            background: rgba(0, 200, 255, 0.2);
+                            color: #00ccff; border: 1px solid rgba(0, 200, 255, 0.4);
+                            border-radius: 8px; font-weight: 600; cursor: pointer;
+                        ">🔍</button>
+                    </div>
                     <button id="proc-btn" style="
                         margin-top: 18px; width: 100%; padding: 13px;
-                        background: linear-gradient(135deg, #ff0000, #5a0000);
+                        background: linear-gradient(135deg, #0066ff, #003366);
                         color: white; border: none; border-radius: 8px;
                         font-weight: 600; cursor: pointer;
-                        box-shadow: 0 3px 15px rgba(255, 0, 0, 0.4);
+                        box-shadow: 0 3px 15px rgba(0, 102, 255, 0.4);
                     ">🎯 Processar Gabarito</button>
                 </div>
                 <div id="result-section" style="padding: 0 25px 25px; display: none;">
                     <div id="result" style="
                         margin-top: 25px; padding: 20px;
                         background: #000000; border-radius: 8px;
-                        color: #ffcccc; min-height: 60px;
+                        color: #99ccff; min-height: 60px;
                         max-height: 400px; overflow-y: auto; line-height: 1.6;
                     "></div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button id="copy-all-btn" style="
+                            flex: 1; padding: 12px;
+                            background: rgba(0, 200, 255, 0.2);
+                            color: #00ccff; border: 1px solid rgba(0, 200, 255, 0.4);
+                            border-radius: 8px; font-weight: 600; cursor: pointer;
+                        ">📋 Copiar Tudo</button>
+                        <button id="export-btn" style="
+                            padding: 12px 16px;
+                            background: rgba(0, 255, 100, 0.2);
+                            color: #00ff66; border: 1px solid rgba(0, 255, 100, 0.4);
+                            border-radius: 8px; font-weight: 600; cursor: pointer;
+                        ">💾 Exportar</button>
+                    </div>
                 </div>
                 <div style="
-                    padding: 12px 24px; background: #000; border-top: 1px solid #330000;
+                    padding: 12px 24px; background: #000; border-top: 1px solid #003366;
                     font-size: 12px; color: #666; text-align: center;
                 ">
-                    Feito por <a href="https://github.com/hackermoon1" target="_blank" style="color:#ff6666; text-decoration: none; font-weight: bold;">@hackermoon</a> & 
-                    <a href="#" style="color:#ff6666; text-decoration: none; font-weight: bold;">@trampos</a> • 
+                    Feito por <a href="https://github.com/KilluaWq" target="_blank" style="color:#6699ff; text-decoration: none; font-weight: bold;">@bakai</a> & 
+                    <a href="#" style="color:#6699ff; text-decoration: none; font-weight: bold;">@trampos</a> • 
                     <a href="https://discord.com/invite/kmeuwvXTNH" target="_blank" style="color:#00ccff; text-decoration: none;">Servidor Discord</a>
                 </div>
             </div>
         `;
         panel.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 999998; pointer-events: none;
             background: rgba(0,0,0,0.9); display: flex;
             align-items: center; justify-content: center;
@@ -207,7 +236,10 @@ javascript:(function() {
         });
         // ========== FIM DRAG & DROP ========== //
 
-        // Processar JSON
+        // ========== VARIÁVEIS GLOBAIS ========== //
+        let currentData = [];
+
+        // ========== PROCESSAR JSON ========== //
         panel.querySelector("#proc-btn").onclick = () => {
             try {
                 const input = panel.querySelector("#json-area").value;
@@ -216,6 +248,8 @@ javascript:(function() {
 
                 if (!data.length) throw new Error("JSON deve conter pelo menos uma questão.");
 
+                currentData = data;
+
                 const resultDiv = panel.querySelector("#result");
 
                 // RENDERIZA O GABARITO — SEM MOSTRAR O CONTEXTO
@@ -223,26 +257,24 @@ javascript:(function() {
                     const letra = Object.keys(item.alternativa_correta)[0];
                     const texto = item.alternativa_correta[letra];
 
-                    let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid #330000">`;
+                    let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid rgba(0,102,255,0.2);">`;
 
-                    // → MOSTRA ID (se existir)
+                    // → ID
                     if (item.id_da_questao) {
-                        html += `<div style="font-size:13px; color:#666; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
+                        html += `<div style="font-size:13px; color:#6699ff; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
                     }
 
-                    // → NÃO MOSTRA CONTEXTO
-
-                    // → MOSTRA PERGUNTA
+                    // → PERGUNTA
                     html += `
                         <div style="
-                            font-weight: 700; margin: 10px 0 8px; color: #ff9999; font-size: 17px;
+                            font-weight: 700; margin: 10px 0 8px; color: #66ccff; font-size: 17px;
                         ">${item.enunciado_pergunta || item.enunciado}</div>
                         <div style="
                             display: flex; align-items: center; gap: 10px; margin-top: 8px;
                         ">
                             <span style="
-                                font-weight: 700; color: #ff6666;
-                                background: rgba(255, 102, 102, 0.15); padding: 5px 12px;
+                                font-weight: 700; color: #6699ff;
+                                background: rgba(102, 153, 255, 0.15); padding: 5px 12px;
                                 border-radius: 6px; font-size: 15px;
                             ">${letra})</span>
                             <span>${texto}</span>
@@ -252,7 +284,7 @@ javascript:(function() {
                     return html;
                 }).join("");
 
-                resultDiv.style.color = "#ff9999";
+                resultDiv.style.color = "#99ccff";
 
                 // → OCULTA INPUT, MOSTRA RESULTADO
                 panel.querySelector("#input-section").style.display = "none";
@@ -260,12 +292,99 @@ javascript:(function() {
 
             } catch (err) {
                 const resultDiv = panel.querySelector("#result");
-                resultDiv.innerHTML = `<span style="color:#ff6666; font-weight:600">❌ Erro: ${err.message || err}</span>`;
+                resultDiv.innerHTML = `<span style="color:#6699ff; font-weight:600">❌ Erro: ${err.message || err}</span>`;
                 panel.querySelector("#result-section").style.display = "block";
             }
         };
 
-        // Toggle abrir/fechar painel
+        // ========== BUSCAR ========== //
+        panel.querySelector("#search-btn").onclick = () => {
+            const term = panel.querySelector("#search-input").value.trim().toLowerCase();
+            if (!term) return;
+
+            const filtered = currentData.filter(item => {
+                const id = item.id_da_questao ? item.id_da_questao.toString().toLowerCase() : "";
+                const pergunta = (item.enunciado_pergunta || item.enunciado || "").toLowerCase();
+                return id.includes(term) || pergunta.includes(term);
+            });
+
+            if (!filtered.length) {
+                panel.querySelector("#result").innerHTML = `<span style="color:#6699ff;">🔍 Nenhuma questão encontrada.</span>`;
+                return;
+            }
+
+            const resultDiv = panel.querySelector("#result");
+            resultDiv.innerHTML = filtered.map(item => {
+                const letra = Object.keys(item.alternativa_correta)[0];
+                const texto = item.alternativa_correta[letra];
+
+                let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid rgba(0,102,255,0.2);">`;
+
+                // → ID
+                if (item.id_da_questao) {
+                    html += `<div style="font-size:13px; color:#6699ff; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
+                }
+
+                // → PERGUNTA
+                html += `
+                    <div style="
+                        font-weight: 700; margin: 10px 0 8px; color: #66ccff; font-size: 17px;
+                    ">${item.enunciado_pergunta || item.enunciado}</div>
+                    <div style="
+                        display: flex; align-items: center; gap: 10px; margin-top: 8px;
+                    ">
+                        <span style="
+                            font-weight: 700; color: #6699ff;
+                            background: rgba(102, 153, 255, 0.15); padding: 5px 12px;
+                            border-radius: 6px; font-size: 15px;
+                        ">${letra})</span>
+                        <span>${texto}</span>
+                    </div>
+                </div>`;
+
+                return html;
+            }).join("");
+
+            resultDiv.style.color = "#99ccff";
+        };
+
+        // ========== COPIAR TUDO ========== //
+        panel.querySelector("#copy-all-btn").onclick = () => {
+            const text = currentData.map(item => {
+                const letra = Object.keys(item.alternativa_correta)[0];
+                const texto = item.alternativa_correta[letra];
+                return `${item.id_da_questao || '?'} - ${(item.enunciado_pergunta || item.enunciado || '').substring(0, 100)}...\n${letra}) ${texto}\n`;
+            }).join("\n");
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = panel.querySelector("#copy-all-btn");
+                btn.innerText = "✅ Copiado!";
+                setTimeout(() => {
+                    btn.innerText = "📋 Copiar Tudo";
+                }, 2000);
+            });
+        };
+
+        // ========== EXPORTAR ========== //
+        panel.querySelector("#export-btn").onclick = () => {
+            const text = currentData.map(item => {
+                const letra = Object.keys(item.alternativa_correta)[0];
+                const texto = item.alternativa_correta[letra];
+                return `${item.id_da_questao || '?'} - ${item.enunciado_pergunta || item.enunciado}\n${letra}) ${texto}\n`;
+            }).join("\n");
+
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "gabarito_infinity.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // ========== TOGGLE ABRIR/FECHAR ========== //
         btn.onclick = () => {
             const p = panel;
             if (p.style.opacity === "1") {
@@ -274,16 +393,19 @@ javascript:(function() {
             } else {
                 p.style.opacity = "1";
                 p.style.visibility = "visible";
+                p.style.left = "50%";
+                p.style.top = "50%";
+                p.style.transform = "translate(-50%, -50%)";
             }
         };
 
-        // Fechar com ×
+        // ========== FECHAR COM × ========== //
         panel.querySelector("#close-btn").onclick = () => {
             panel.style.opacity = "0";
             panel.style.visibility = "hidden";
         };
 
-        // Fechar clicando fora
+        // ========== FECHAR CLICANDO FORA ========== //
         panel.onclick = (e) => {
             if (e.target === panel) {
                 panel.style.opacity = "0";
@@ -291,5 +413,4 @@ javascript:(function() {
             }
         };
     }
-
 })();
