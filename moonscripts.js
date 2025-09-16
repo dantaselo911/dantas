@@ -39,7 +39,7 @@ javascript:(function() {
         "→ Conectando ao banco de gabaritos...",
         "→ Acesso root concedido.",
         "⚠️ ALERTA: SISTEMA COMPROMETIDO — VOCÊ FOI HACKEADO!",
-        "→ Iniciando interface InfinityCode v3.0...",
+        "→ Iniciando interface InfinityCode v8.0...",
         "✅ Sistema carregado. Clique no botão flutuante."
     ];
 
@@ -105,7 +105,7 @@ javascript:(function() {
         btn.onmouseover = () => { btn.style.transform = "scale(1.05)"; };
         btn.onmouseout = () => { btn.style.transform = "scale(1)"; };
 
-        // Painel do InfinityCode — COM BUSCA E AZUL/PRETO
+        // Painel do InfinityCode — COM IMAGENS E BUSCA
         const panel = document.createElement("div");
         panel.id = "infinity-panel";
         panel.innerHTML = `
@@ -138,8 +138,17 @@ javascript:(function() {
                         resize: vertical; outline: none;
                         box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
                     "></textarea>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <input type="text" id="search-input" placeholder="Buscar por ID ou palavra..." style="
+                    <button id="proc-btn" style="
+                        margin-top: 18px; width: 100%; padding: 13px;
+                        background: linear-gradient(135deg, #0066ff, #003366);
+                        color: white; border: none; border-radius: 8px;
+                        font-weight: 600; cursor: pointer;
+                        box-shadow: 0 3px 15px rgba(0, 102, 255, 0.4);
+                    ">🎯 Processar Gabarito</button>
+                </div>
+                <div id="result-section" style="padding: 0 25px 25px; display: none;">
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <input type="text" id="search-input" placeholder="🔍 Buscar por ID ou palavra..." style="
                             flex: 1; padding: 12px;
                             background: #001133; color: #99ccff;
                             border: 1px solid rgba(0, 102, 255, 0.3);
@@ -153,17 +162,8 @@ javascript:(function() {
                             border-radius: 8px; font-weight: 600; cursor: pointer;
                         ">🔍</button>
                     </div>
-                    <button id="proc-btn" style="
-                        margin-top: 18px; width: 100%; padding: 13px;
-                        background: linear-gradient(135deg, #0066ff, #003366);
-                        color: white; border: none; border-radius: 8px;
-                        font-weight: 600; cursor: pointer;
-                        box-shadow: 0 3px 15px rgba(0, 102, 255, 0.4);
-                    ">🎯 Processar Gabarito</button>
-                </div>
-                <div id="result-section" style="padding: 0 25px 25px; display: none;">
                     <div id="result" style="
-                        margin-top: 25px; padding: 20px;
+                        margin-top: 20px; padding: 20px;
                         background: #000000; border-radius: 8px;
                         color: #99ccff; min-height: 60px;
                         max-height: 400px; overflow-y: auto; line-height: 1.6;
@@ -252,7 +252,7 @@ javascript:(function() {
 
                 const resultDiv = panel.querySelector("#result");
 
-                // RENDERIZA O GABARITO — SEM MOSTRAR O CONTEXTO
+                // RENDERIZA O GABARITO — COM IMAGENS
                 resultDiv.innerHTML = data.map(item => {
                     const letra = Object.keys(item.alternativa_correta)[0];
                     const texto = item.alternativa_correta[letra];
@@ -262,6 +262,13 @@ javascript:(function() {
                     // → ID
                     if (item.id_da_questao) {
                         html += `<div style="font-size:13px; color:#6699ff; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
+                    }
+
+                    // → IMAGEM (se houver)
+                    if (item.imagem_url) {
+                        html += `<div style="margin: 12px 0; text-align: center;">
+                            <img src="${item.imagem_url}" alt="Imagem da questão" style="max-width:100%; max-height:200px; border-radius:6px; border:1px solid rgba(102,153,255,0.2);">
+                        </div>`;
                     }
 
                     // → PERGUNTA
@@ -286,7 +293,7 @@ javascript:(function() {
 
                 resultDiv.style.color = "#99ccff";
 
-                // → OCULTA INPUT, MOSTRA RESULTADO
+                // → OCULTA INPUT, MOSTRA RESULTADO + BUSCA
                 panel.querySelector("#input-section").style.display = "none";
                 panel.querySelector("#result-section").style.display = "block";
 
@@ -297,7 +304,7 @@ javascript:(function() {
             }
         };
 
-        // ========== BUSCAR ========== //
+        // ========== BUSCAR NO GABARITO ========== //
         panel.querySelector("#search-btn").onclick = () => {
             const term = panel.querySelector("#search-input").value.trim().toLowerCase();
             if (!term) return;
@@ -323,6 +330,13 @@ javascript:(function() {
                 // → ID
                 if (item.id_da_questao) {
                     html += `<div style="font-size:13px; color:#6699ff; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
+                }
+
+                // → IMAGEM (se houver)
+                if (item.imagem_url) {
+                    html += `<div style="margin: 12px 0; text-align: center;">
+                        <img src="${item.imagem_url}" alt="Imagem da questão" style="max-width:100%; max-height:200px; border-radius:6px; border:1px solid rgba(102,153,255,0.2);">
+                    </div>`;
                 }
 
                 // → PERGUNTA
