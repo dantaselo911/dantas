@@ -217,7 +217,7 @@ javascript:(function() {
 
                 const resultDiv = panel.querySelector("#result");
 
-                // RENDERIZA O GABARITO — SEM MOSTRAR O CONTEXTO — ✅ CORRIGIDO "undefined"
+                // RENDERIZA O GABARITO — SEM MOSTRAR O CONTEXTO
                 resultDiv.innerHTML = data.map(item => {
                     const letra = Object.keys(item.alternativa_correta)[0];
                     const texto = item.alternativa_correta[letra];
@@ -229,12 +229,11 @@ javascript:(function() {
                         html += `<div style="font-size:13px; color:#666; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
                     }
 
-                    // → PERGUNTA — ✅ CORREÇÃO AQUI
-                    const pergunta = item.enunciado_pergunta || "[Pergunta não definida]";
+                    // → PERGUNTA
                     html += `
                         <div style="
                             font-weight: 700; margin: 10px 0 8px; color: #ff9999; font-size: 17px;
-                        ">${pergunta}</div>
+                        ">${item.enunciado_pergunta}</div>
                         <div style="
                             display: flex; align-items: center; gap: 10px; margin-top: 8px;
                         ">
