@@ -49,23 +49,25 @@ javascript:fetch("https://raw.githubusercontent.com/dantaselo911/dantas/refs/hea
 ---
 
 ## ⚡ Como Usar - Método 2: Console do Navegador
+Rápido e Prático:
+🔧 Abra o DevTools:
+F12 ou Ctrl+Shift+J (Windows/Linux)
+Cmd+Option+J (Mac)
+⌨️ Vá até a aba Console
+🛡️ Habilite colagem - Digite ou cole: allow pasting
+📋 Cole este código:
+javascript
 
-### Rápido e Prático:
 
-1. **🔧 Abra o DevTools:**
-   - `F12` ou `Ctrl+Shift+J` (Windows/Linux)
-   - `Cmd+Option+J` (Mac)
-2. **⌨️ Vá até a aba Console**
-3. **📋 Cole este código:**
-
-```javascript
+1
+2
+3
 fetch("https://raw.githubusercontent.com/dantaselo911/dantas/refs/heads/main/moonscripts.js")
   .then(t => t.text())
   .then(eval);
-```
+↩️ Pressione Enter
+👆 Clique no botão flutuante e comece a usar!
 
-4. **↩️ Pressione Enter**
-5. **👆 Clique no botão flutuante** e comece a usar!
 
 ---
 
