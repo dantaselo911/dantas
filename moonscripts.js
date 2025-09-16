@@ -13,8 +13,8 @@ javascript:(function() {
         ">
             <div style="
                 width: 90%; max-width: 800px; padding: 30px;
-                background: #000; border: 2px solid #0f0;
-                box-shadow: 0 0 30px rgba(0,255,0,0.7); border-radius: 10px;
+                background: #000; border: 2px solid #f00;
+                box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); border-radius: 10px;
                 overflow: hidden; text-align: left;
             ">
                 <div id="lines" style="
@@ -52,7 +52,7 @@ javascript:(function() {
         cursor.style.display = "none";
         const lineDiv = document.createElement("div");
         lineDiv.textContent = "";
-        lineDiv.style.color = msgIndex === 3 ? "#f00" : "#0f0";
+        lineDiv.style.color = msgIndex === 3 ? "#ff0000" : "#00ff00";
         lineDiv.style.fontWeight = msgIndex === 3 ? "bold" : "normal";
         linesContainer.appendChild(lineDiv);
 
@@ -85,33 +85,33 @@ javascript:(function() {
     function launchToggleGabarito() {
         document.body.removeChild(overlay);
 
-        // Botão flutuante
+        // Botão flutuante — VERMELHO + PRETO DEGRADÊ
         const btn = document.createElement("button");
         btn.id = "moon-btn";
         btn.innerText = "🌙 Gabarito";
         btn.style.cssText = `
             position: fixed; bottom: 24px; right: 24px; z-index: 999999;
-            background: linear-gradient(90deg, #7b1fa2, #4a148c);
+            background: linear-gradient(135deg, #ff0000, #220000, #000000);
             color: white; border: none; border-radius: 32px;
             padding: 14px 24px; font-weight: 600; font-family: Segoe UI;
-            cursor: pointer; box-shadow: 0 5px 20px rgba(138,43,226,0.6);
+            cursor: pointer; box-shadow: 0 5px 25px rgba(255, 0, 0, 0.5);
             transition: transform 0.2s, box-shadow 0.2s;
         `;
         btn.onmouseover = () => { btn.style.transform = "scale(1.05)"; };
         btn.onmouseout = () => { btn.style.transform = "scale(1)"; };
 
-        // Painel do Gabarito (inicialmente escondido)
+        // Painel do Gabarito — VERMELHO + PRETO DEGRADÊ NO CABEÇALHO
         const panel = document.createElement("div");
         panel.id = "moon-panel";
         panel.innerHTML = `
             <div style="
                 width: 92%; max-width: 650px;
-                background: #1a1a2e; border-radius: 18px;
-                box-shadow: 0 12px 45px rgba(138,43,226,0.7);
+                background: #111; border-radius: 18px;
+                box-shadow: 0 12px 50px rgba(255, 0, 0, 0.6);
                 overflow: hidden; pointer-events: auto; font-family: Segoe UI;
             " id="gab-window">
                 <div style="
-                    background: linear-gradient(90deg, #4a148c, #7b1fa2);
+                    background: linear-gradient(90deg, #ff0000, #8b0000, #000000);
                     color: white; padding: 22px 24px; font-weight: bold; font-size: 20px;
                     display: flex; justify-content: space-between; align-items: center;
                 ">
@@ -123,27 +123,27 @@ javascript:(function() {
                         justify-content: center;
                     ">✕</button>
                 </div>
-                <div style="padding: 25px; background: #0f0f1a;" id="input-section">
+                <div style="padding: 25px; background: #0a0a0a;" id="input-section">
                     <textarea id="json-area" placeholder="Cole seu JSON aqui (formato personalizado)..." style="
                         width: 100%; height: 180px; padding: 14px;
-                        background: #161626; color: #e0e0ff;
-                        border: 1px solid #4a148c; border-radius: 8px;
+                        background: #1a0000; color: #ffcccc;
+                        border: 1px solid #8b0000; border-radius: 8px;
                         font-family: monospace; resize: vertical; outline: none;
                     "></textarea>
                     <button id="proc-btn" style="
                         margin-top: 18px; width: 100%; padding: 13px;
-                        background: linear-gradient(90deg, #7b1fa2, #4a148c);
+                        background: linear-gradient(135deg, #ff0000, #5a0000);
                         color: white; border: none; border-radius: 8px;
                         font-weight: 600; cursor: pointer;
-                        box-shadow: 0 3px 10px rgba(123,31,162,0.3);
+                        box-shadow: 0 3px 15px rgba(255, 0, 0, 0.4);
                     ">🎯 Processar Gabarito</button>
                 </div>
                 <div id="result-section" style="padding: 0 25px 25px; display: none;">
                     <div id="result" style="
                         margin-top: 25px; padding: 20px;
-                        background: #0a0a14; border-radius: 8px;
-                        color: #e0e0ff; min-height: 60px; max-height: 400px;
-                        overflow-y: auto; line-height: 1.6;
+                        background: #000000; border: 1px solid #330000;
+                        border-radius: 8px; color: #ffcccc; min-height: 60px;
+                        max-height: 400px; overflow-y: auto; line-height: 1.6;
                     "></div>
                 </div>
             </div>
@@ -151,7 +151,7 @@ javascript:(function() {
         panel.style.cssText = `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 999998; pointer-events: none;
-            background: rgba(0,0,0,0.8); display: flex;
+            background: rgba(0,0,0,0.9); display: flex;
             align-items: center; justify-content: center;
             opacity: 0; visibility: hidden;
             transition: opacity 0.35s, visibility 0.35s;
@@ -165,7 +165,7 @@ javascript:(function() {
             try {
                 const input = panel.querySelector("#json-area").value;
                 let data = JSON.parse(input);
-                if (!Array.isArray(data)) data = [data]; // aceita objeto único
+                if (!Array.isArray(data)) data = [data];
 
                 if (!data.length) throw new Error("JSON deve conter pelo menos uma questão.");
 
@@ -176,26 +176,26 @@ javascript:(function() {
                     const letra = Object.keys(item.alternativa_correta)[0];
                     const texto = item.alternativa_correta[letra];
 
-                    let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid #3a3a5a">`;
+                    let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid #330000">`;
 
                     // → MOSTRA ID (se existir)
                     if (item.id_da_questao) {
-                        html += `<div style="font-size:13px; color:#aaa; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
+                        html += `<div style="font-size:13px; color:#666; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
                     }
 
-                    // → NÃO MOSTRA CONTEXTO (mesmo que exista, é ignorado)
+                    // → NÃO MOSTRA CONTEXTO
 
                     // → MOSTRA PERGUNTA
                     html += `
                         <div style="
-                            font-weight: 700; margin: 10px 0 8px; color: #c697ff; font-size: 17px;
+                            font-weight: 700; margin: 10px 0 8px; color: #ff9999; font-size: 17px;
                         ">${item.enunciado_pergunta}</div>
                         <div style="
                             display: flex; align-items: center; gap: 10px; margin-top: 8px;
                         ">
                             <span style="
-                                font-weight: 700; color: #66ffaa;
-                                background: rgba(102,255,170,0.15); padding: 5px 12px;
+                                font-weight: 700; color: #ff6666;
+                                background: rgba(255, 102, 102, 0.15); padding: 5px 12px;
                                 border-radius: 6px; font-size: 15px;
                             ">${letra})</span>
                             <span>${texto}</span>
@@ -205,15 +205,15 @@ javascript:(function() {
                     return html;
                 }).join("");
 
-                resultDiv.style.color = "#a5d6a7";
+                resultDiv.style.color = "#ff9999";
 
-                // → OCULTA O INPUT E MOSTRA O RESULTADO
+                // → OCULTA INPUT, MOSTRA RESULTADO
                 panel.querySelector("#input-section").style.display = "none";
                 panel.querySelector("#result-section").style.display = "block";
 
             } catch (err) {
                 const resultDiv = panel.querySelector("#result");
-                resultDiv.innerHTML = `<span style="color:#ef9a9a; font-weight:600">❌ Erro: ${err.message || err}</span>`;
+                resultDiv.innerHTML = `<span style="color:#ff6666; font-weight:600">❌ Erro: ${err.message || err}</span>`;
                 panel.querySelector("#result-section").style.display = "block";
             }
         };
