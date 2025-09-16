@@ -10,9 +10,8 @@
 
 ## 🚀 O que é o InfinityCode?
 
-O **InfinityCode** é um bookmarklet revolucionário que transforma qualquer página da web em um ambiente de estudo interativo! Carregado dinamicamente via GitHub, ele oferece uma interface hacker estilosa para processar e visualizar gabaritos de questões objetivas com recursos avançados.
-
-🎯 **Perfeito para estudantes, professores e candidatos de concursos!**
+O **InfinityCode** éatalho para gabrito
+🎯 **Perfeito para estudantes!**
 
 ---
 
