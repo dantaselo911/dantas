@@ -67,7 +67,7 @@ javascript:(function(){
         }
         #gabarito-window {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             background: #1a1a2e;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(138, 43, 226, 0.6);
@@ -106,28 +106,35 @@ javascript:(function(){
         #gabarito-content {
             padding: 25px;
             color: #e0e0ff;
-            line-height: 1.8;
-            font-size: 16px;
+            line-height: 1.6;
+            font-size: 15px;
             background: #0f0f1a;
         }
         .item-gabarito {
-            padding: 8px 0;
+            padding: 16px 0;
             border-bottom: 1px solid #30304a;
-            display: flex;
-            gap: 8px;
         }
         .item-gabarito:last-child {
             border-bottom: none;
         }
-        .numero {
-            font-weight: bold;
+        .pergunta {
+            font-weight: 600;
+            margin-bottom: 6px;
             color: #bb86fc;
-            min-width: 24px;
+            font-size: 16px;
+        }
+        .resposta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
         }
         .letra {
             font-weight: bold;
             color: #00e676;
-            margin-right: 4px;
+            background: rgba(0, 230, 118, 0.15);
+            padding: 2px 8px;
+            border-radius: 4px;
         }
     `;
 
@@ -138,12 +145,15 @@ javascript:(function(){
     let gabaritoHTML = '';
 
     dados.questoes.forEach(q => {
-        const letra = String.fromCharCode(65 + q.correta); // A, B, C, D
+        const letra = String.fromCharCode(65 + q.correta); // A=0, B=1, C=2...
         const resposta = q.alternativas[q.correta];
         gabaritoHTML += `
             <div class="item-gabarito">
-                <div class="numero">${q.id}.</div>
-                <div><span class="letra">${letra})</span> ${resposta}</div>
+                <div class="pergunta">${q.id}. ${q.pergunta}</div>
+                <div class="resposta">
+                    <span class="letra">${letra})</span>
+                    ${resposta}
+                </div>
             </div>
         `;
     });
