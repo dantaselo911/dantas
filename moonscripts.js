@@ -1,12 +1,12 @@
 javascript:(function(){
     if (document.getElementById('moon-hack-root')) return;
 
-    // === FASE 1: ANIMAÇÃO HACKER ===
+    // === FASE 1: ANIMAÇÃO HACKER COM LAYOUT CORRETO ===
     const hackOverlay = document.createElement('div');
     hackOverlay.id = 'moon-hack-root';
     hackOverlay.innerHTML = `
         <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2147483647;display:flex;align-items:center;justify-content:center;color:#0f0;font-family:'Courier New',monospace;overflow:hidden">
-            <div style="width:90%;max-width:800px;padding:30px;background:#000;border:1px solid #0f0;box-shadow:0 0 25px rgba(0,255,0,0.6);text-align:left">
+            <div style="width:90%;max-width:800px;padding:30px;background:#000;border:2px solid #0f0;box-shadow:0 0 25px rgba(0,255,0,0.6);text-align:left;white-space:pre-wrap;word-wrap:break-word;">
                 <div class="hack-line">root@moonscript:~# Iniciando script secreto...</div>
                 <div class="hack-line">></div>
             </div>
@@ -36,6 +36,7 @@ javascript:(function(){
         cursor.remove();
         const line = document.createElement('div');
         line.className = 'hack-line';
+        line.style.overflow = 'hidden';
         container.appendChild(line);
 
         let charIndex = 0;
@@ -63,7 +64,7 @@ javascript:(function(){
 
     setTimeout(typeNext, 800);
 
-    // === FASE 2: GABARITO ELEGANTE (DARK + ROXO) ===
+    // === FASE 2: GABARITO ELEGANTE ===
     function launchGabarito() {
         document.body.removeChild(hackOverlay);
 
@@ -90,7 +91,7 @@ javascript:(function(){
         btn.onmouseover = () => { btn.style.transform = 'scale(1.05)'; };
         btn.onmouseout = () => { btn.style.transform = 'scale(1)'; };
 
-        // Painel do Gabarito (escondido inicialmente)
+        // Painel do Gabarito
         const panel = document.createElement('div');
         panel.id = 'moon-gab-panel';
         panel.innerHTML = `
@@ -166,7 +167,7 @@ javascript:(function(){
             panel.style.visibility = 'hidden';
         };
 
-        // Fecha ao clicar fora (opcional, comente se não quiser)
+        // Fecha ao clicar fora (opcional)
         panel.onclick = (e) => {
             if (e.target === panel) {
                 panel.style.opacity = '0';
