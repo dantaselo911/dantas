@@ -27,11 +27,11 @@ javascript:(function(){
 
     const messages = [
         "root@moonscript:~# Iniciando script de acesso root...",
-        "→ Conectando ao servidor lunar... ✓",
+        "→ Conectando ao servidor... ✓",
         "→ Acesso concedido. Bem-vindo, usuário #666.",
         "⚠️ ALERTA: SISTEMA COMPROMETIDO — VOCÊ FOI HACKEADO!",
         "→ Descompactando módulo: MoonScript Gabarito v2.0...",
-        "→ Iniciando interface elegante... ✓",
+        "→ Iniciando... ✓",
         "✅ Sistema carregado. Liberando controle de acesso."
     ];
 
@@ -190,3 +190,4 @@ javascript:(function(){
         };
     }
 })();
+
