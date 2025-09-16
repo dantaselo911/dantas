@@ -1,4 +1,4 @@
-```markdown
+
 # 🌌 InfinityCode
 
 > **Bookmarklet poderoso para visualizar e interagir com gabaritos de questões objetivas diretamente no navegador**
