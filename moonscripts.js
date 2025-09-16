@@ -1,7 +1,7 @@
 javascript:(function(){
     if (document.getElementById('moon-hack-root')) return;
 
-    // === FASE 1: ANIMAÇÃO HACKER SEM BUGS ===
+    // === FASE 1: ANIMAÇÃO HACKER ===
     const overlay = document.createElement('div');
     overlay.id = 'moon-hack-root';
     overlay.style.cssText = `
@@ -27,12 +27,12 @@ javascript:(function(){
 
     const messages = [
         "root@moonscript:~# Iniciando script de acesso root...",
-        "→ Conectando ao servidor... ✓",
+        "→ Conectando ao servidor lunar... ✓",
         "→ Acesso concedido. Bem-vindo, usuário #666.",
         "⚠️ ALERTA: SISTEMA COMPROMETIDO — VOCÊ FOI HACKEADO!",
-        "→ Descompactando módulo: MoonScript Gabarito v2.0...",
-        "→ Iniciando... ✓",
-        "✅ Sistema carregado. Liberando controle de acesso."
+        "→ Descompactando módulo: MoonScript Gabarito v3.0...",
+        "→ Iniciando interface com suporte a JSON customizado... ✓",
+        "✅ Sistema carregado. Cole seu JSON para exibir o gabarito."
     ];
 
     const speeds = [40, 50, 50, 1, 40, 50, 50];
@@ -78,7 +78,7 @@ javascript:(function(){
 
     setTimeout(typeLine, 500);
 
-    // === FASE 2: LANÇA O BOTÃO TOGGLE + GABARITO (DARK + ROXO) ===
+    // === FASE 2: BOTÃO TOGGLE + JANELA PARA COLAR JSON ===
     function launchToggleGabarito() {
         document.body.removeChild(overlay);
 
@@ -111,10 +111,14 @@ javascript:(function(){
         panel.innerHTML = `
             <div id="gab-window" style="width:92%;max-width:620px;background:#1a1a2e;border-radius:18px;box-shadow:0 12px 45px rgba(138,43,226,0.7);overflow:hidden;pointer-events:auto;font-family:Segoe UI">
                 <div style="background:linear-gradient(90deg,#4a148c,#7b1fa2);color:white;padding:22px 24px;font-weight:bold;font-size:20px;display:flex;justify-content:space-between;align-items:center">
-                    <span>MoonScript — Gabarito Oficial</span>
+                    <span>MoonScript — Cole seu JSON</span>
                     <button id="gab-close" style="background:0;border:0;color:white;font-size:28px;cursor:pointer;padding:0;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center">✕</button>
                 </div>
-                <div id="gab-content" style="padding:30px 25px;color:#e0e0ff;line-height:1.7;font-size:16px;background:#0f0f1a;max-height:70vh;overflow-y:auto"></div>
+                <div style="padding:20px;background:#0f0f1a;">
+                    <textarea id="json-input" placeholder="Cole seu JSON aqui (formato do gabarito)..." style="width:100%;height:180px;padding:14px;background:#161626;color:#e0e0ff;border:1px solid #4a148c;border-radius:8px;font-family:monospace;font-size:14px;resize:vertical;outline:none;"></textarea>
+                    <button id="process-btn" style="margin-top:15px;width:100%;padding:12px;background:linear-gradient(90deg,#7b1fa2,#4a148c);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Processar Gabarito</button>
+                    <div id="output-area" style="margin-top:20px;padding:20px;background:#0a0a14;border-radius:8px;color:#e0e0ff;min-height:50px;max-height:300px;overflow-y:auto;"></div>
+                </div>
             </div>
         `;
         panel.style.cssText = `
@@ -131,37 +135,48 @@ javascript:(function(){
             transition: opacity 0.35s, visibility 0.35s;
         `;
 
-        // Conteúdo do Gabarito
-        const questoes = [
-            {id:1,pergunta:"Qual é a capital do Brasil?",alternativas:["São Paulo","Rio de Janeiro","Brasília","Belo Horizonte"],correta:2},
-            {id:2,pergunta:"Quem foi o primeiro homem a pisar na Lua?",alternativas:["Yuri Gagarin","Neil Armstrong","Buzz Aldrin","Michael Collins"],correta:1},
-            {id:3,pergunta:"Qual é o maior oceano do mundo?",alternativas:["Atlântico","Índico","Ártico","Pacífico"],correta:3},
-            {id:4,pergunta:"Quantos estados tem o Brasil?",alternativas:["24","26","27","25"],correta:1},
-            {id:5,pergunta:"Quem escreveu 'O Pequeno Príncipe'?",alternativas:["Machado de Assis","Antoine de Saint-Exupéry","Monteiro Lobato","J. K. Rowling"],correta:1}
-        ];
-
-        const content = panel.querySelector('#gab-content');
-        content.innerHTML = questoes.map(q => {
-            const letra = String.fromCharCode(65 + q.correta);
-            const resposta = q.alternativas[q.correta];
-            return `
-                <div style="padding:18px 0;margin-bottom:18px;border-bottom:1px solid #333;">
-                    <div style="font-weight:700;margin-bottom:8px;color:#c697ff;font-size:17px;">
-                        ${q.id}. ${q.pergunta}
-                    </div>
-                    <div style="display:flex;align-items:center;gap:10px;">
-                        <span style="font-weight:700;color:#66ffaa;background:rgba(102,255,170,0.15);padding:4px 12px;border-radius:6px;font-size:15px;">
-                            ${letra})
-                        </span>
-                        <span>${resposta}</span>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        // Adiciona elementos ao corpo
         document.body.appendChild(btn);
         document.body.appendChild(panel);
+
+        // Processar JSON
+        const processBtn = panel.querySelector('#process-btn');
+        const jsonInput = panel.querySelector('#json-input');
+        const outputArea = panel.querySelector('#output-area');
+
+        processBtn.onclick = () => {
+            try {
+                const data = JSON.parse(jsonInput.value);
+
+                if (!data.questoes || !Array.isArray(data.questoes)) {
+                    throw new Error('Formato inválido: precisa ter "questoes" como array.');
+                }
+
+                outputArea.innerHTML = data.questoes.map((q, idx) => {
+                    if (q.correta == null || !q.alternativas || !q.pergunta) {
+                        return `<div style="color:#ff9999;margin:10px 0;">⚠ Questão ${q.id || idx+1} mal formatada.</div>`;
+                    }
+                    const letra = String.fromCharCode(65 + q.correta);
+                    const resposta = q.alternativas[q.correta];
+                    return `
+                        <div style="padding:18px 0;margin-bottom:18px;border-bottom:1px solid #333;">
+                            <div style="font-weight:700;margin-bottom:8px;color:#c697ff;font-size:17px;">
+                                ${q.id || (idx+1)}. ${q.pergunta}
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span style="font-weight:700;color:#66ffaa;background:rgba(102,255,170,0.15);padding:4px 12px;border-radius:6px;font-size:15px;">
+                                    ${letra})
+                                </span>
+                                <span>${resposta}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                outputArea.style.color = '#a5d6a7';
+            } catch (err) {
+                outputArea.innerHTML = `<span style="color:#ef9a9a;">❌ Erro: ${err.message}</span>`;
+            }
+        };
 
         // Toggle abrir/fechar
         btn.onclick = () => {
@@ -181,7 +196,7 @@ javascript:(function(){
             panel.style.visibility = 'hidden';
         };
 
-        // Fecha ao clicar fora (opcional)
+        // Fecha ao clicar fora
         panel.onclick = (e) => {
             if (e.target === panel) {
                 panel.style.opacity = '0';
@@ -190,4 +205,3 @@ javascript:(function(){
         };
     }
 })();
-
