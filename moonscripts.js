@@ -1,5 +1,8 @@
 javascript:(function() {
-    if (document.getElementById("moon-root")) return;
+    if (document.getElementById("moon-root")) {
+        console.log("MoonScript já está ativo.");
+        return;
+    }
 
     // === FASE 1: ANIMAÇÃO HACKER ===
     const overlay = document.createElement("div");
@@ -13,15 +16,16 @@ javascript:(function() {
         ">
             <div style="
                 width: 90%; max-width: 800px; padding: 30px;
-                background: #000; border: 2px solid #f00;
-                box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); border-radius: 10px;
+                background: #000; border: 2px solid #0f0;
+                box-shadow: 0 0 30px rgba(0, 255, 0, 0.5); border-radius: 12px;
                 overflow: hidden; text-align: left;
             ">
                 <div id="lines" style="
                     max-height: 70vh; overflow-y: auto;
                     line-height: 1.5; word-wrap: break-word;
+                    font-size: 16px;
                 "></div>
-                <div id="cur">></div>
+                <div id="cur" style="color: #0f0; margin-top: 12px; font-size: 18px;">></div>
             </div>
         </div>
     `;
@@ -35,8 +39,8 @@ javascript:(function() {
         "→ Conectando ao banco de gabaritos...",
         "→ Acesso root concedido.",
         "⚠️ ALERTA: SISTEMA COMPROMETIDO — VOCÊ FOI HACKEADO!",
-        "→ Iniciando interface MoonScript v5.0...",
-        "✅ Sistema carregado. Clique no botão flutuante para inserir seu JSON."
+        "→ Iniciando interface MoonScript v6.0...",
+        "✅ Sistema carregado. Clique no botão flutuante."
     ];
 
     const speeds = [50, 50, 50, 1, 50, 50];
@@ -52,7 +56,7 @@ javascript:(function() {
         cursor.style.display = "none";
         const lineDiv = document.createElement("div");
         lineDiv.textContent = "";
-        lineDiv.style.color = msgIndex === 3 ? "#ff0000" : "#00ff00";
+        lineDiv.style.color = msgIndex === 3 ? "#ff3333" : "#00ff66";
         lineDiv.style.fontWeight = msgIndex === 3 ? "bold" : "normal";
         linesContainer.appendChild(lineDiv);
 
@@ -85,7 +89,7 @@ javascript:(function() {
     function launchToggleGabarito() {
         document.body.removeChild(overlay);
 
-        // Botão flutuante — VERMELHO + PRETO DEGRADÊ
+        // Botão flutuante
         const btn = document.createElement("button");
         btn.id = "moon-btn";
         btn.innerText = "🌙 Gabarito";
@@ -100,7 +104,7 @@ javascript:(function() {
         btn.onmouseover = () => { btn.style.transform = "scale(1.05)"; };
         btn.onmouseout = () => { btn.style.transform = "scale(1)"; };
 
-        // Painel do Gabarito — VERMELHO + PRETO DEGRADÊ NO CABEÇALHO
+        // Painel do Gabarito — COM DRAG & DROP E BORDA CORRIGIDA
         const panel = document.createElement("div");
         panel.id = "moon-panel";
         panel.innerHTML = `
@@ -110,12 +114,13 @@ javascript:(function() {
                 box-shadow: 0 12px 50px rgba(255, 0, 0, 0.6);
                 overflow: hidden; pointer-events: auto; font-family: Segoe UI;
             " id="gab-window">
-                <div style="
+                <div id="gab-header" style="
                     background: linear-gradient(90deg, #ff0000, #8b0000, #000000);
                     color: white; padding: 22px 24px; font-weight: bold; font-size: 20px;
                     display: flex; justify-content: space-between; align-items: center;
+                    cursor: move; user-select: none;
                 ">
-                    <span>MoonScript — Cole seu JSON</span>
+                    <span>MoonScript — Gabarito</span>
                     <button id="close-btn" style="
                         background: 0; border: 0; color: white; font-size: 28px;
                         cursor: pointer; padding: 0; width: 40px; height: 40px;
@@ -125,10 +130,12 @@ javascript:(function() {
                 </div>
                 <div style="padding: 25px; background: #0a0a0a;" id="input-section">
                     <textarea id="json-area" placeholder="Cole seu JSON aqui (formato personalizado)..." style="
-                        width: 100%; height: 180px; padding: 14px;
+                        width: 100%; height: 180px; padding: 16px;
                         background: #1a0000; color: #ffcccc;
-                        border: 1px solid #8b0000; border-radius: 8px;
-                        font-family: monospace; resize: vertical; outline: none;
+                        border: 1px solid rgba(255, 0, 0, 0.3); /* ✅ BORDA ELEGANTE */
+                        border-radius: 8px; font-family: monospace;
+                        resize: vertical; outline: none;
+                        box-shadow: inset 0 1px 4px rgba(0,0,0,0.6); /* ✅ SOMBRA INTERNA */
                     "></textarea>
                     <button id="proc-btn" style="
                         margin-top: 18px; width: 100%; padding: 13px;
@@ -141,15 +148,23 @@ javascript:(function() {
                 <div id="result-section" style="padding: 0 25px 25px; display: none;">
                     <div id="result" style="
                         margin-top: 25px; padding: 20px;
-                        background: #000000; border: 1px solid #330000;
-                        border-radius: 8px; color: #ffcccc; min-height: 60px;
+                        background: #000000; border-radius: 8px;
+                        color: #ffcccc; min-height: 60px;
                         max-height: 400px; overflow-y: auto; line-height: 1.6;
                     "></div>
+                </div>
+                <div style="
+                    padding: 12px 24px; background: #000; border-top: 1px solid #330000;
+                    font-size: 12px; color: #666; text-align: center;
+                ">
+                    Feito por <a href="https://github.com/hackermoon1" target="_blank" style="color:#ff6666; text-decoration: none; font-weight: bold;">@hackermoon</a> & 
+                    <a href="#" style="color:#ff6666; text-decoration: none; font-weight: bold;">@trampos</a> • 
+                    <a href="https://discord.com/invite/kmeuwvXTNH" target="_blank" style="color:#00ccff; text-decoration: none;">Servidor Discord</a>
                 </div>
             </div>
         `;
         panel.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 999998; pointer-events: none;
             background: rgba(0,0,0,0.9); display: flex;
             align-items: center; justify-content: center;
@@ -159,6 +174,37 @@ javascript:(function() {
 
         document.body.appendChild(btn);
         document.body.appendChild(panel);
+
+        // ========== DRAG & DROP ========== //
+        const header = panel.querySelector("#gab-header");
+        let isDragging = false;
+        let offsetX = 0, offsetY = 0;
+
+        header.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            const rect = panel.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            panel.style.transition = "none";
+            e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            panel.style.pointerEvents = "none";
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+            panel.style.left = x + "px";
+            panel.style.top = y + "px";
+            panel.style.transform = "none";
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            panel.style.transition = "opacity 0.35s, visibility 0.35s";
+            panel.style.pointerEvents = "auto";
+        });
+        // ========== FIM DRAG & DROP ========== //
 
         // Processar JSON
         panel.querySelector("#proc-btn").onclick = () => {
@@ -176,16 +222,14 @@ javascript:(function() {
                     const letra = Object.keys(item.alternativa_correta)[0];
                     const texto = item.alternativa_correta[letra];
 
-                    let html = `<div style="padding:18px 0; margin-bottom:22px; border-bottom:1px solid #330000">`;
+                    let html = `<div style="padding:18px 0; margin-bottom:22px;">`;
 
-                    // → MOSTRA ID (se existir)
+                    // → ID
                     if (item.id_da_questao) {
                         html += `<div style="font-size:13px; color:#666; margin-bottom:8px">ID: ${item.id_da_questao}</div>`;
                     }
 
-                    // → NÃO MOSTRA CONTEXTO
-
-                    // → MOSTRA PERGUNTA
+                    // → PERGUNTA
                     html += `
                         <div style="
                             font-weight: 700; margin: 10px 0 8px; color: #ff9999; font-size: 17px;
@@ -207,7 +251,7 @@ javascript:(function() {
 
                 resultDiv.style.color = "#ff9999";
 
-                // → OCULTA INPUT, MOSTRA RESULTADO
+                // → OCULTA INPUT
                 panel.querySelector("#input-section").style.display = "none";
                 panel.querySelector("#result-section").style.display = "block";
 
@@ -218,7 +262,7 @@ javascript:(function() {
             }
         };
 
-        // Toggle abrir/fechar painel
+        // Toggle abrir/fechar
         btn.onclick = () => {
             const p = panel;
             if (p.style.opacity === "1") {
@@ -227,6 +271,9 @@ javascript:(function() {
             } else {
                 p.style.opacity = "1";
                 p.style.visibility = "visible";
+                p.style.left = "50%";
+                p.style.top = "50%";
+                p.style.transform = "translate(-50%, -50%)";
             }
         };
 
