@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  // ====== COLE AQUI SEU GABARITO (já limpo: só numero + texto/imagem) ======
+  // ====== GABARITO COMPLETO ======
   const gabarito = [
     { "questao_numero": 1, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/AaiDkRlOyyjITYDe1ETaY9e6LrN130.jpg" },
     { "questao_numero": 2, "alternativa_correta": "1,09" },
@@ -50,304 +50,128 @@
     { "questao_numero": 45, "alternativa_correta": "botaoDeAcessibilidade.addEventListener('click', function() { opcoesDeAcessibilidade.classList.toggle('apresenta-lista'); });" }
   ];
 
-  // ====== UTIL ======
+  // ====== FUNÇÕES ======
   function normalizar(txt) {
-    if (txt == null) return '';
-    try {
-      return String(txt)
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/^[A-Z]\s*[)\.-]\s*/i, '') // tira A) B) etc do começo
-        .replace(/\s+/g, ' ')
-        .trim();
-    } catch (e) {
-      return String(txt).toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!txt) return '';
+    return String(txt)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function atualizarStatus(msg, cor="#ecf0f1") {
+    statusDiv.textContent = msg;
+    statusDiv.style.color = cor;
+  }
+
+  function clicarProximo() {
+    const btn = [...document.querySelectorAll("button,a")].find(b =>
+      /pr[oó]xima?|avan[cç]ar|continuar|seguinte|prosseguir/i.test(b.textContent.trim())
+    );
+    if (btn) {
+      btn.scrollIntoView({behavior:"smooth", block:"center"});
+      setTimeout(()=>btn.click(),300);
     }
   }
 
-  function isVisible(el) {
-    try {
-      const rc = el.getBoundingClientRect();
-      const style = getComputedStyle(el);
-      return rc.width > 0 && rc.height > 0 && style.visibility !== 'hidden' && style.display !== 'none' && parseFloat(style.opacity || 1) > 0;
-    } catch (e) {
-      return false;
+  function responderPeloTexto() {
+    const numEl = [...document.querySelectorAll("*")].find(el =>
+      /quest[ãa]o\s*(\d+)/i.test(el.textContent)
+    );
+    if (!numEl) return;
+    const numero = parseInt(numEl.textContent.match(/quest[ãa]o\s*(\d+)/i)[1]);
+    if (numero === ultimoNumeroQuestao) return;
+    ultimoNumeroQuestao = numero;
+
+    const questao = gabarito.find(q => q.questao_numero === numero);
+    if (!questao) {
+      atualizarStatus(`⚠️ Questão ${numero} não no gabarito`, "#e67e22");
+      return;
     }
+
+    const correta = normalizar(questao.alternativa_correta);
+
+    // 🔎 procura em <p> com input radio
+    const candidatos = [...document.querySelectorAll("p")].filter(el => {
+      if (!el.textContent) return false;
+      if (!el.querySelector("input[type=radio]")) return false;
+      const txt = normalizar(el.textContent);
+      return txt.includes(correta) || correta.includes(txt);
+    });
+
+    if (candidatos.length === 0) {
+      atualizarStatus(`⚠️ Alternativa não encontrada Q${numero}`, "#e67e22");
+      return;
+    }
+
+    const alvo = candidatos[0];
+    alvo.scrollIntoView({behavior:"smooth", block:"center"});
+    setTimeout(() => {
+      const input = alvo.querySelector('input[type="radio"]');
+      if (input && !input.disabled) input.click();
+      else alvo.click();
+      atualizarStatus(`✅ Questão ${numero} respondida!`, "#27ae60");
+      setTimeout(clicarProximo, 800);
+    }, 500);
   }
 
-  // ====== CRIA PAINEL (DRAGGABLE) ======
-  const container = document.createElement('div');
-  container.id = 'autoResponderContainer_v1';
-  Object.assign(container.style, {
-    position: 'fixed',
-    top: '18px',
-    right: '18px',
-    zIndex: 2147483647,
-    fontFamily: 'Arial, sans-serif',
-    width: '320px',
-    boxShadow: '0 6px 24px rgba(0,0,0,0.4)',
-    borderRadius: '10px',
-    overflow: 'hidden'
-  });
-
-  container.innerHTML = `
-    <div style="background:#2c3e50;color:#fff;padding:10px;display:flex;align-items:center;justify-content:space-between;cursor:grab;">
-      <strong style="font-size:14px">🤖 AutoResponder</strong>
-      <div style="display:flex;gap:8px">
-        <button id="ar_minBtn" title="Minimizar" style="background:#34495e;border:none;color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer">—</button>
-        <button id="ar_closeBtn" title="Fechar" style="background:#e74c3c;border:none;color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer">✕</button>
-      </div>
-    </div>
-    <div style="background:#fff;color:#333;padding:12px" id="ar_body">
-      <div id="ar_status" style="margin-bottom:10px;color:#333">Aguardando...</div>
-      <button id="ar_start" style="width:100%;padding:8px;border-radius:6px;border:none;background:#27ae60;color:#fff;font-weight:700;cursor:pointer">▶️ Iniciar Automação</button>
-      <button id="ar_stop" style="width:100%;padding:8px;border-radius:6px;border:none;background:#e67e22;color:#fff;font-weight:700;cursor:pointer;display:none;margin-top:8px">⏹️ Parar</button>
+  // ====== PAINEL ======
+  const overlay = document.createElement('div');
+  overlay.innerHTML = `
+    <div style="position:fixed;top:20px;right:20px;background:#2c3e50;color:#fff;
+                padding:12px;border-radius:10px;width:300px;font-family:Arial;z-index:99999;
+                box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+      <h3 style="margin:0 0 10px 0;font-size:16px;display:flex;justify-content:space-between;align-items:center;">
+        🤖 AutoResponder
+        <button id="fecharBtn" style="background:#e74c3c;border:none;color:#fff;width:24px;height:24px;
+                border-radius:50%;cursor:pointer;">✕</button>
+      </h3>
+      <div id="status" style="margin-bottom:10px;font-size:14px">Aguardando...</div>
+      <button id="iniciarBtn" style="background:#27ae60;border:none;color:#fff;padding:8px;
+              border-radius:5px;font-weight:bold;width:100%">▶️ Iniciar Automação</button>
+      <button id="pararBtn" style="background:#e67e22;border:none;color:#fff;padding:8px;
+              border-radius:5px;font-weight:bold;width:100%;margin-top:8px;display:none;">⏹️ Parar</button>
     </div>
   `;
-  document.body.appendChild(container);
+  document.body.appendChild(overlay);
 
-  // draggable
-  (function makeDraggable(el) {
-    const header = el.querySelector('div:first-child');
-    let dragging = false, ox = 0, oy = 0;
-    header.addEventListener('mousedown', e => {
-      if (e.target.tagName === 'BUTTON') return; // não arrasta quando clica nos botões
-      dragging = true;
-      ox = e.clientX - el.getBoundingClientRect().left;
-      oy = e.clientY - el.getBoundingClientRect().top;
-      header.style.cursor = 'grabbing';
-      e.preventDefault();
-    });
-    document.addEventListener('mousemove', e => {
-      if (!dragging) return;
-      el.style.left = (e.clientX - ox) + 'px';
-      el.style.top = (e.clientY - oy) + 'px';
-      el.style.right = 'auto';
-    });
-    document.addEventListener('mouseup', () => {
-      dragging = false;
-      header.style.cursor = 'grab';
-    });
-  })(container);
+  const statusDiv = overlay.querySelector('#status');
+  const iniciarBtn = overlay.querySelector('#iniciarBtn');
+  const pararBtn = overlay.querySelector('#pararBtn');
+  const fecharBtn = overlay.querySelector('#fecharBtn');
 
-  const statusEl = container.querySelector('#ar_status');
-  const startBtn = container.querySelector('#ar_start');
-  const stopBtn = container.querySelector('#ar_stop');
-  const closeBtn = container.querySelector('#ar_closeBtn');
-  const minBtn = container.querySelector('#ar_minBtn');
-  const bodyEl = container.querySelector('#ar_body');
+  fecharBtn.addEventListener('click', () => overlay.remove());
 
-  closeBtn.addEventListener('click', ()=> { try { container.remove(); } catch(e){} });
-  minBtn.addEventListener('click', ()=> {
-    if (bodyEl.style.display === 'none') bodyEl.style.display = '';
-    else bodyEl.style.display = 'none';
-  });
+  let observando = false;
+  let ultimoNumeroQuestao = null;
 
-  function setStatus(txt, color = '#333') {
-    statusEl.textContent = txt;
-    statusEl.style.color = color;
+  function iniciar() {
+    if (observando) return;
+    observando = true;
+    iniciarBtn.style.display = "none";
+    pararBtn.style.display = "block";
+    responderPeloTexto();
+    const observer = new MutationObserver(()=>{ if(observando) responderPeloTexto(); });
+    observer.observe(document.body,{childList:true,subtree:true});
+    overlay.observer = observer;
+    overlay.intervalo = setInterval(()=>{ if(observando) responderPeloTexto(); },2000);
+    atualizarStatus("▶️ Automação iniciada","#27ae60");
   }
 
-  // ====== LOGICA PRINCIPAL ======
-  let observing = false;
-  let lastQuestionNumber = null;
-  let observer = null;
-  let checkInterval = null;
-  let debounceTimer = null;
-
-  function clicarElemento(el) {
-    try {
-      if (!el) return false;
-      // prefer inputs
-      const input = el.querySelector('input[type="radio"], input[type="checkbox"]');
-      if (input && !input.disabled) {
-        input.click();
-        return true;
-      }
-      // anchors / buttons inside
-      const bt = el.querySelector('button, a');
-      if (bt) { bt.click(); return true; }
-      // try clicking the element itself
-      el.scrollIntoView({behavior:'smooth', block:'center'});
-      el.dispatchEvent(new MouseEvent('mouseover', {bubbles:true}));
-      el.click();
-      return true;
-    } catch (e) {
-      try { el.click(); return true; } catch (e2) { return false; }
-    }
+  function parar() {
+    observando = false;
+    iniciarBtn.style.display = "block";
+    pararBtn.style.display = "none";
+    if (overlay.observer) overlay.observer.disconnect();
+    if (overlay.intervalo) clearInterval(overlay.intervalo);
+    atualizarStatus("⏹️ Automação parada.");
   }
 
-  function findOptionByImageUrl(elList, urlNormalized) {
-    for (const el of elList) {
-      try {
-        const imgs = el.querySelectorAll ? el.querySelectorAll('img') : [];
-        for (const img of imgs) {
-          if (!img.src) continue;
-          if (normalizar(img.src).includes(urlNormalized) || normalizar(img.getAttribute('data-src')||'').includes(urlNormalized)) {
-            if (isVisible(el)) return el;
-          }
-        }
-      } catch (e){}
-    }
-    return null;
-  }
+  iniciarBtn.addEventListener('click', iniciar);
+  pararBtn.addEventListener('click', parar);
 
-  function findOptionByText(elList, textNormalized) {
-    for (const el of elList) {
-      try {
-        if (!el.textContent) continue;
-        if (!isVisible(el)) continue;
-        const nt = normalizar(el.textContent);
-        if (nt.includes(textNormalized) || textNormalized.includes(nt)) {
-          return el;
-        }
-      } catch (e){}
-    }
-    return null;
-  }
-
-  function gatherCandidates() {
-    // seletor amplo mas não brutal
-    const selector = 'label, .option, .alternativa, .answer, li, div, p, span, button, td';
-    return Array.from(document.querySelectorAll(selector));
-  }
-
-  function getQuestionNumberFromPage() {
-    // Busca texto que contenha "questão X" (case-insensitive)
-    try {
-      const all = Array.from(document.querySelectorAll('h1,h2,h3,h4,div,p,span,label,section'));
-      for (const el of all) {
-        if (!el.textContent) continue;
-        const m = el.textContent.match(/quest[ãa]o[\s:\-]*?(\d{1,3})/i);
-        if (m) return parseInt(m[1], 10);
-      }
-      // fallback: procurar "Questão" em qualquer elemento
-      const any = Array.from(document.querySelectorAll('*'));
-      for (const el of any) {
-        if (!el.textContent) continue;
-        const m = el.textContent.match(/quest[ãa]o[\s:\-]*?(\d{1,3})/i);
-        if (m) return parseInt(m[1], 10);
-      }
-      return null;
-    } catch (e) { return null; }
-  }
-
-  function attemptAnswer() {
-    try {
-      const qnum = getQuestionNumberFromPage();
-      if (!qnum) { setStatus('❌ Não identifiquei número da questão na página.'); return; }
-      if (qnum === lastQuestionNumber) return;
-      lastQuestionNumber = qnum;
-      setStatus(`🔎 Detectei questão ${qnum} — procurando no gabarito...`, '#1f618d');
-
-      const qObj = gabarito.find(x => x.questao_numero === qnum);
-      if (!qObj) { setStatus(`⚠️ Questão ${qnum} não está no gabarito.`, '#e67e22'); setTimeout(tryNext, 800); return; }
-
-      const raw = qObj.alternativa_correta || '';
-      const isImagem = /^\[IMAGEM\]\s*/i.test(raw);
-      const textToMatch = isImagem ? normalizar(raw.replace(/^\[IMAGEM\]\s*/i, '')) : normalizar(raw);
-
-      const candidates = gatherCandidates();
-
-      let alvo = null;
-      if (isImagem) {
-        // tenta achar por <img src> que contenha a url/base64
-        alvo = findOptionByImageUrl(candidates, textToMatch);
-        if (!alvo) {
-          // também tenta por texto (algumas plataformas mostram a URL como texto)
-          alvo = findOptionByText(candidates, textToMatch);
-        }
-      } else {
-        alvo = findOptionByText(candidates, textToMatch);
-      }
-
-      if (!alvo) {
-        setStatus(`⚠️ Alternativa não encontrada na tela para Q${qnum}. (tentando pular)`, '#e67e22');
-        setTimeout(tryNext, 700);
-        return;
-      }
-
-      // se o alvo for um filho, sobe até o label ou container clicável
-      let clickable = alvo;
-      let climb = 0;
-      while (clickable && climb < 6 && !['LABEL','LI','BUTTON','A','DIV','P','SPAN','TD'].includes(clickable.tagName)) {
-        clickable = clickable.parentElement;
-        climb++;
-      }
-      if (!clickable) clickable = alvo;
-
-      // tenta clicar
-      const ok = clicarElemento(clickable || alvo);
-      if (ok) {
-        setStatus(`✅ Respondido Q${qnum}.`, '#27ae60');
-        setTimeout(tryNext, 900);
-      } else {
-        setStatus(`❌ Falha ao clicar Q${qnum}. Tentando clicar direto no texto...`, '#c0392b');
-        clicarElemento(alvo);
-        setTimeout(tryNext, 900);
-      }
-    } catch (err) {
-      console.error('autoResponder erro:', err);
-      setStatus('❌ Erro interno (veja console).', '#c0392b');
-    }
-  }
-
-  function tryNext() {
-    try {
-      const nextBtn = Array.from(document.querySelectorAll('button,a,div')).find(b => {
-        if (!b.textContent) return false;
-        return /pr[oó]xima?|avan[cç]ar|continuar|seguinte|prosseguir|salvar|próximo/i.test(b.textContent.trim());
-      });
-      if (nextBtn) {
-        nextBtn.scrollIntoView({behavior:'smooth', block:'center'});
-        setTimeout(()=>{ try { nextBtn.click(); } catch(e){} }, 250);
-      }
-    } catch (e) {}
-  }
-
-  // debounce wrapper pro observer
-  function scheduleAttempt() {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => attemptAnswer(), 250);
-  }
-
-  function startAutomation() {
-    if (observing) return;
-    observing = true;
-    startBtn.style.display = 'none';
-    stopBtn.style.display = 'block';
-    setStatus('▶️ Automação iniciada.', '#27ae60');
-    // roda imediatamente
-    scheduleAttempt();
-    // observer
-    observer = new MutationObserver(scheduleAttempt);
-    observer.observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
-    // backup interval
-    checkInterval = setInterval(scheduleAttempt, 2000);
-    container._observer = observer;
-    container._interval = checkInterval;
-  }
-
-  function stopAutomation() {
-    observing = false;
-    startBtn.style.display = '';
-    stopBtn.style.display = 'none';
-    setStatus('⏹️ Automação parada.');
-    if (observer) { observer.disconnect(); observer = null; }
-    if (checkInterval) { clearInterval(checkInterval); checkInterval = null; }
-  }
-
-  startBtn.addEventListener('click', startAutomation);
-  stopBtn.addEventListener('click', stopAutomation);
-
-  // limpinho: evita duplicar painel se já existe
-  if (document.querySelectorAll('#autoResponderContainer_v1').length > 1) {
-    setStatus('Painel duplicado detectado — removendo o novo.');
-    container.remove();
-    return;
-  }
-
-  setTimeout(()=> setStatus("✅ Sistema pronto. Aperte 'Iniciar Automação'."), 80);
+  atualizarStatus("✅ Sistema carregado. Clique em 'Iniciar'.","#27ae60");
 
 })();
