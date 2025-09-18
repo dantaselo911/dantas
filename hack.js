@@ -1,10 +1,10 @@
 (function() {
-    // ðŸ‘‡ COLE SEU GABARITO COMPLETO AQUI
+    // 👇 COLE SEU GABARITO COMPLETO AQUI
     const gabarito = [
         {
             "questao_numero": 1,
             "id_da_questao": 392847501,
-            "enunciado": "Com base em seus conhecimentos sobre a reflexÃ£o de raios de luz em espelhos planos...",
+            "enunciado": "Com base em seus conhecimentos sobre a reflexão de raios de luz em espelhos planos...",
             "alternativa_correta": {
                 "B": "I - reta normal; II - raio incidente; III - raio refletido."
             }
@@ -12,12 +12,12 @@
         {
             "questao_numero": 2,
             "id_da_questao": 282754095,
-            "enunciado": "Leia o texto e responda Ã  questÃ£o. Ãšrsula Maria Firmina...",
+            "enunciado": "Leia o texto e responda à questão. Úrsula Maria Firmina...",
             "alternativa_correta": {
                 "B": "O sistema opressor escravocrata."
             }
         }
-        // ... cole todas as questÃµes aqui
+        // ... cole todas as questões aqui
     ];
 
     // Cria janela flutuante
@@ -39,7 +39,7 @@
             user-select: none;
         ">
             <h3 style="margin: 0 0 10px 0; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
-                ðŸ¤– AutoResponder
+                🤖 AutoResponder
                 <button id="fecharBtn" style="
                     background: #e74c3c;
                     border: none;
@@ -52,7 +52,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                ">âœ•</button>
+                ">✕</button>
             </h3>
             <div id="status" style="margin: 10px 0; font-size: 14px; color: #ecf0f1;">Aguardando...</div>
             <button id="iniciarBtn" style="
@@ -64,7 +64,7 @@
                 cursor: pointer;
                 font-weight: bold;
                 width: 100%;
-            ">â–¶ï¸ Iniciar AutomaÃ§Ã£o</button>
+            ">▶️ Iniciar Automação</button>
             <button id="pararBtn" style="
                 background: #e67e22;
                 border: none;
@@ -76,13 +76,13 @@
                 width: 100%;
                 margin-top: 8px;
                 display: none;
-            ">â¹ï¸ Parar</button>
+            ">⏹️ Parar</button>
         </div>
     `;
 
     document.body.appendChild(overlay);
 
-    // Torna a janela arrastÃ¡vel
+    // Torna a janela arrastável
     let isDragging = false;
     let offsetX, offsetY;
     const header = overlay.querySelector('h3');
@@ -104,7 +104,7 @@
 
     document.addEventListener('mouseup', () => isDragging = false);
 
-    // BotÃµes
+    // Botões
     const fecharBtn = overlay.querySelector('#fecharBtn');
     const iniciarBtn = overlay.querySelector('#iniciarBtn');
     const pararBtn = overlay.querySelector('#pararBtn');
@@ -123,43 +123,43 @@
     function clicarProximo() {
         const btnProximo = [...document.querySelectorAll('button, a')]
             .find(btn => 
-                /pr[oÃ³]xima?|avan[cÃ§]ar|continuar|seguinte|prosseguir|salvar/i.test(btn.textContent.trim())
+                /pr[oó]xima?|avan[cç]ar|continuar|seguinte|prosseguir|salvar/i.test(btn.textContent.trim())
             );
 
         if (btnProximo) {
             btnProximo.scrollIntoView({ behavior: 'smooth', block: 'center' });
             setTimeout(() => {
                 btnProximo.click();
-                atualizarStatus("â­ï¸ AvanÃ§ando para prÃ³xima questÃ£o...", "#3498db");
+                atualizarStatus("⏭️ Avançando para próxima questão...", "#3498db");
             }, 300);
         } else {
-            atualizarStatus("âš ï¸ BotÃ£o 'PrÃ³ximo' nÃ£o encontrado.", "#e67e22");
+            atualizarStatus("⚠️ Botão 'Próximo' não encontrado.", "#e67e22");
         }
     }
 
     function responderPeloTexto() {
-        // 1. Procura nÃºmero da questÃ£o
+        // 1. Procura número da questão
         const elementoNumero = [...document.querySelectorAll('*')].find(el => 
-            /questÃ£o\s*(\d+)/i.test(el.textContent)
+            /questão\s*(\d+)/i.test(el.textContent)
         );
 
         if (!elementoNumero) {
-            atualizarStatus("âŒ NÃ£o encontrei nÃºmero da questÃ£o.", "#e74c3c");
+            atualizarStatus("❌ Não encontrei número da questão.", "#e74c3c");
             return;
         }
 
-        const numeroQuestao = parseInt(elementoNumero.textContent.match(/questÃ£o\s*(\d+)/i)[1]);
+        const numeroQuestao = parseInt(elementoNumero.textContent.match(/questão\s*(\d+)/i)[1]);
 
-        // SÃ³ executa se mudou de questÃ£o
+        // Só executa se mudou de questão
         if (numeroQuestao === ultimoNumeroQuestao) return;
         ultimoNumeroQuestao = numeroQuestao;
 
-        atualizarStatus(`ðŸ“Œ Detectada questÃ£o ${numeroQuestao}...`, "#f39c12");
+        atualizarStatus(`📌 Detectada questão ${numeroQuestao}...`, "#f39c12");
 
         // 2. Busca no gabarito
         const questao = gabarito.find(q => q.questao_numero === numeroQuestao);
         if (!questao) {
-            atualizarStatus(`âš ï¸ QuestÃ£o ${numeroQuestao} nÃ£o no gabarito â€” pulando...`, "#e67e22");
+            atualizarStatus(`⚠️ Questão ${numeroQuestao} não no gabarito — pulando...`, "#e67e22");
             setTimeout(clicarProximo, 1000);
             return;
         }
@@ -176,8 +176,8 @@
         });
 
         if (candidatos.length === 0) {
-            atualizarStatus(`âš ï¸ Alternativa nÃ£o encontrada â€” pulando questÃ£o ${numeroQuestao}...`, "#e67e22");
-            setTimeout(clicarProximo, 1000); // â¬…ï¸ AQUI: pula se nÃ£o achar!
+            atualizarStatus(`⚠️ Alternativa não encontrada — pulando questão ${numeroQuestao}...`, "#e67e22");
+            setTimeout(clicarProximo, 1000); // ⬅️ AQUI: pula se não achar!
             return;
         }
 
@@ -195,13 +195,13 @@
             const input = alvo.querySelector('input[type="radio"], input[type="checkbox"]');
             if (input && !input.disabled) {
                 input.click();
-                atualizarStatus(`âœ… Respondido: QuestÃ£o ${numeroQuestao}!`, "#27ae60");
+                atualizarStatus(`✅ Respondido: Questão ${numeroQuestao}!`, "#27ae60");
             } else {
                 alvo.click();
-                atualizarStatus(`âœ… Respondido (click direto): QuestÃ£o ${numeroQuestao}!`, "#27ae60");
+                atualizarStatus(`✅ Respondido (click direto): Questão ${numeroQuestao}!`, "#27ae60");
             }
 
-            // â­ï¸ CLICA EM "PRÃ“XIMO" APÃ“S 1 SEGUNDO
+            // ⏭️ CLICA EM "PRÓXIMO" APÓS 1 SEGUNDO
             setTimeout(clicarProximo, 1000);
 
         }, 800);
@@ -216,7 +216,7 @@
         // Executa imediatamente
         responderPeloTexto();
 
-        // Observa mudanÃ§as na pÃ¡gina (mutaÃ§Ãµes)
+        // Observa mudanças na página (mutações)
         const observer = new MutationObserver(() => {
             if (observando) responderPeloTexto();
         });
@@ -228,7 +228,7 @@
             characterData: true
         });
 
-        // TambÃ©m verifica a cada 2 segundos (backup)
+        // Também verifica a cada 2 segundos (backup)
         const intervalo = setInterval(() => {
             if (observando) responderPeloTexto();
         }, 2000);
@@ -244,7 +244,7 @@
         pararBtn.style.display = 'none';
         if (overlay.observer) overlay.observer.disconnect();
         if (overlay.intervalo) clearInterval(overlay.intervalo);
-        atualizarStatus("â¹ï¸ AutomaÃ§Ã£o parada.", "#ecf0f1");
+        atualizarStatus("⏹️ Automação parada.", "#ecf0f1");
     }
 
     iniciarBtn.addEventListener('click', iniciarObservador);
@@ -256,5 +256,5 @@
     overlay.style.right = '20px';
     overlay.style.zIndex = '99999';
 
-    atualizarStatus("âœ… Sistema carregado. Clique em 'Iniciar'.", "#27ae60");
+    atualizarStatus("✅ Sistema carregado. Clique em 'Iniciar'.", "#27ae60");
 })();
