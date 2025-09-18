@@ -1,148 +1,353 @@
 (function() {
-    const gabarito = [
-      { "questao_numero": 1, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/AaiDkRlOyyjITYDe1ETaY9e6LrN130.jpg" },
-      { "questao_numero": 2, "alternativa_correta": "1,09" },
-      { "questao_numero": 3, "alternativa_correta": "igual a 8." },
-      { "questao_numero": 4, "alternativa_correta": "resolução IV." },
-      { "questao_numero": 5, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/BbtopN2SvNHSSoKIV5KVuoYjDMYAqA.jpg" },
-      { "questao_numero": 6, "alternativa_correta": "R$ 381,00" },
-      { "questao_numero": 7, "alternativa_correta": "10" },
-      { "questao_numero": 8, "alternativa_correta": "[IMAGEM] data:image/jpeg;base64,/9j/4AAQSk..." },
-      { "questao_numero": 9, "alternativa_correta": "1,21" },
-      { "questao_numero": 10, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/OVxvxi5cmA5JcqLmGCiDXLRf6Ss9hW.jpg" },
-      { "questao_numero": 11, "alternativa_correta": "10" },
-      { "questao_numero": 12, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/1EMDxRK2CPNi8Ho5Wk47TcVd4LGsvf.jpg" },
-      { "questao_numero": 13, "alternativa_correta": "[IMAGEM] data:image/jpeg;base64,/9j/4AAQSk..." },
-      { "questao_numero": 14, "alternativa_correta": "30" },
-      { "questao_numero": 15, "alternativa_correta": "5 20" },
-      { "questao_numero": 16, "alternativa_correta": "R$ 2.560,00" },
-      { "questao_numero": 17, "alternativa_correta": "Saber quanto se ganha e quanto se pode gastar, evitando desequilíbrios." },
-      { "questao_numero": 18, "alternativa_correta": "Planejamento financeiro inadequado." },
-      { "questao_numero": 19, "alternativa_correta": "Negociar as dívidas e ajustar o orçamento familiar." },
-      { "questao_numero": 20, "alternativa_correta": "Refletir se realmente precisa de algo a mais antes de decidir pela compra." },
-      { "questao_numero": 21, "alternativa_correta": "Registro diário e organizado de todos os gastos, inclusive os pequenos." },
-      { "questao_numero": 22, "alternativa_correta": "Evitar dívidas e fazer escolhas que respeitem a própria realidade financeira." },
-      { "questao_numero": 23, "alternativa_correta": "RNA." },
-      { "questao_numero": 24, "alternativa_correta": "realizado no núcleo, é produzida uma fita de RNA a partir do DNA." },
-      { "questao_numero": 25, "alternativa_correta": "Tradução, que ocorre nos ribossomos e monta cadeias de aminoácidos." },
-      { "questao_numero": 26, "alternativa_correta": "3 verdes : 1 amarela" },
-      { "questao_numero": 27, "alternativa_correta": "Clone é um ser ou célula com o mesmo material genético do original, útil na produção de tecidos e no estudo de doenças." },
-      { "questao_numero": 28, "alternativa_correta": "Esse tipo de tratamento atua substituindo, inativando ou reparando genes que causam doenças genéticas. É importante que a decisão da família seja baseada em informações acessíveis e compreensíveis." },
-      { "questao_numero": 29, "alternativa_correta": "Fonte primária, fonte primária, fonte secundária." },
-      { "questao_numero": 30, "alternativa_correta": "900" },
-      { "questao_numero": 31, "alternativa_correta": "Refração da luz." },
-      { "questao_numero": 32, "alternativa_correta": "Refrator." },
-      { "questao_numero": 33, "alternativa_correta": "60°" },
-      { "questao_numero": 34, "alternativa_correta": "espelho esférico convexo." },
-      { "questao_numero": 35, "alternativa_correta": "o ânodo perde elétrons e o cátodo ganha elétrons." },
-      { "questao_numero": 36, "alternativa_correta": "+1" },
-      { "questao_numero": 37, "alternativa_correta": "ΔE° = +3,17 V" },
-      { "questao_numero": 38, "alternativa_correta": "Ni-Cd, por apresentar o maior número de ciclos." },
-      { "questao_numero": 39, "alternativa_correta": "negativo, chamado cátodo." },
-      { "questao_numero": 40, "alternativa_correta": "Galvanoplastia: uso de corrente elétrica para depositar uma camada de cromo sobre outro metal." },
-      { "questao_numero": 41, "alternativa_correta": "Garantir contraste adequado entre texto e fundo." },
-      { "questao_numero": 42, "alternativa_correta": "Um procedimento que ajuda a prevenir a violação de direitos autorais por registrar a origem e a licença da imagem." },
-      { "questao_numero": 43, "alternativa_correta": "Reescrever o conteúdo do texto com suas próprias palavras e indicar a fonte da informação." },
-      { "questao_numero": 44, "alternativa_correta": "Criar botões de ajuste de tamanho de fonte." },
-      { "questao_numero": 45, "alternativa_correta": "botaoDeAcessibilidade.addEventListener('click', function() { opcoesDeAcessibilidade.classList.toggle('apresenta-lista'); });" }
-    ];
+  'use strict';
 
-    function normalizar(txt) {
-        return txt.toLowerCase()
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .replace(/\s+/g, " ")
-                  .trim();
+  // ====== COLE AQUI SEU GABARITO (já limpo: só numero + texto/imagem) ======
+  const gabarito = [
+    { "questao_numero": 1, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/AaiDkRlOyyjITYDe1ETaY9e6LrN130.jpg" },
+    { "questao_numero": 2, "alternativa_correta": "1,09" },
+    { "questao_numero": 3, "alternativa_correta": "igual a 8." },
+    { "questao_numero": 4, "alternativa_correta": "resolução IV." },
+    { "questao_numero": 5, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/BbtopN2SvNHSSoKIV5KVuoYjDMYAqA.jpg" },
+    { "questao_numero": 6, "alternativa_correta": "R$ 381,00" },
+    { "questao_numero": 7, "alternativa_correta": "10" },
+    { "questao_numero": 8, "alternativa_correta": "[IMAGEM] data:image/jpeg;base64,/9j/4AAQSk..." },
+    { "questao_numero": 9, "alternativa_correta": "1,21" },
+    { "questao_numero": 10, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/OVxvxi5cmA5JcqLmGCiDXLRf6Ss9hW.jpg" },
+    { "questao_numero": 11, "alternativa_correta": "10" },
+    { "questao_numero": 12, "alternativa_correta": "[IMAGEM] https://edusp-static.ip.tv/tms/edusp/tv.ip.edusp/1EMDxRK2CPNi8Ho5Wk47TcVd4LGsvf.jpg" },
+    { "questao_numero": 13, "alternativa_correta": "[IMAGEM] data:image/jpeg;base64,/9j/4AAQSk..." },
+    { "questao_numero": 14, "alternativa_correta": "30" },
+    { "questao_numero": 15, "alternativa_correta": "5 20" },
+    { "questao_numero": 16, "alternativa_correta": "R$ 2.560,00" },
+    { "questao_numero": 17, "alternativa_correta": "Saber quanto se ganha e quanto se pode gastar, evitando desequilíbrios." },
+    { "questao_numero": 18, "alternativa_correta": "Planejamento financeiro inadequado." },
+    { "questao_numero": 19, "alternativa_correta": "Negociar as dívidas e ajustar o orçamento familiar." },
+    { "questao_numero": 20, "alternativa_correta": "Refletir se realmente precisa de algo a mais antes de decidir pela compra." },
+    { "questao_numero": 21, "alternativa_correta": "Registro diário e organizado de todos os gastos, inclusive os pequenos." },
+    { "questao_numero": 22, "alternativa_correta": "Evitar dívidas e fazer escolhas que respeitem a própria realidade financeira." },
+    { "questao_numero": 23, "alternativa_correta": "RNA." },
+    { "questao_numero": 24, "alternativa_correta": "realizado no núcleo, é produzida uma fita de RNA a partir do DNA." },
+    { "questao_numero": 25, "alternativa_correta": "Tradução, que ocorre nos ribossomos e monta cadeias de aminoácidos." },
+    { "questao_numero": 26, "alternativa_correta": "3 verdes : 1 amarela" },
+    { "questao_numero": 27, "alternativa_correta": "Clone é um ser ou célula com o mesmo material genético do original, útil na produção de tecidos e no estudo de doenças." },
+    { "questao_numero": 28, "alternativa_correta": "Esse tipo de tratamento atua substituindo, inativando ou reparando genes que causam doenças genéticas. É importante que a decisão da família seja baseada em informações acessíveis e compreensíveis." },
+    { "questao_numero": 29, "alternativa_correta": "Fonte primária, fonte primária, fonte secundária." },
+    { "questao_numero": 30, "alternativa_correta": "900" },
+    { "questao_numero": 31, "alternativa_correta": "Refração da luz." },
+    { "questao_numero": 32, "alternativa_correta": "Refrator." },
+    { "questao_numero": 33, "alternativa_correta": "60°" },
+    { "questao_numero": 34, "alternativa_correta": "espelho esférico convexo." },
+    { "questao_numero": 35, "alternativa_correta": "o ânodo perde elétrons e o cátodo ganha elétrons." },
+    { "questao_numero": 36, "alternativa_correta": "+1" },
+    { "questao_numero": 37, "alternativa_correta": "ΔE° = +3,17 V" },
+    { "questao_numero": 38, "alternativa_correta": "Ni-Cd, por apresentar o maior número de ciclos." },
+    { "questao_numero": 39, "alternativa_correta": "negativo, chamado cátodo." },
+    { "questao_numero": 40, "alternativa_correta": "Galvanoplastia: uso de corrente elétrica para depositar uma camada de cromo sobre outro metal." },
+    { "questao_numero": 41, "alternativa_correta": "Garantir contraste adequado entre texto e fundo." },
+    { "questao_numero": 42, "alternativa_correta": "Um procedimento que ajuda a prevenir a violação de direitos autorais por registrar a origem e a licença da imagem." },
+    { "questao_numero": 43, "alternativa_correta": "Reescrever o conteúdo do texto com suas próprias palavras e indicar a fonte da informação." },
+    { "questao_numero": 44, "alternativa_correta": "Criar botões de ajuste de tamanho de fonte." },
+    { "questao_numero": 45, "alternativa_correta": "botaoDeAcessibilidade.addEventListener('click', function() { opcoesDeAcessibilidade.classList.toggle('apresenta-lista'); });" }
+  ];
+
+  // ====== UTIL ======
+  function normalizar(txt) {
+    if (txt == null) return '';
+    try {
+      return String(txt)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/^[A-Z]\s*[)\.-]\s*/i, '') // tira A) B) etc do começo
+        .replace(/\s+/g, ' ')
+        .trim();
+    } catch (e) {
+      return String(txt).toLowerCase().replace(/\s+/g, ' ').trim();
     }
+  }
 
-    // Painel flutuante
-    const overlay = document.createElement('div');
-    overlay.innerHTML = `
-      <div style="position: fixed; top:20px; right:20px; background:#2c3e50; color:white; padding:15px; border-radius:10px; width:300px; font-family:Arial; z-index:99999;">
-        <h3 style="margin:0 0 10px 0; font-size:16px; display:flex; justify-content:space-between; align-items:center;">
-          🤖 AutoResponder
-          <button id="fecharBtn" style="background:#e74c3c; border:none; color:white; width:24px; height:24px; border-radius:50%; cursor:pointer;">✕</button>
-        </h3>
-        <div id="status" style="margin:10px 0; font-size:14px;">Aguardando...</div>
-        <button id="iniciarBtn" style="background:#27ae60; border:none; color:white; padding:8px; border-radius:5px; font-weight:bold; width:100%;">▶️ Iniciar Automação</button>
-        <button id="pararBtn" style="background:#e67e22; border:none; color:white; padding:8px; border-radius:5px; font-weight:bold; width:100%; margin-top:8px; display:none;">⏹️ Parar</button>
+  function isVisible(el) {
+    try {
+      const rc = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return rc.width > 0 && rc.height > 0 && style.visibility !== 'hidden' && style.display !== 'none' && parseFloat(style.opacity || 1) > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ====== CRIA PAINEL (DRAGGABLE) ======
+  const container = document.createElement('div');
+  container.id = 'autoResponderContainer_v1';
+  Object.assign(container.style, {
+    position: 'fixed',
+    top: '18px',
+    right: '18px',
+    zIndex: 2147483647,
+    fontFamily: 'Arial, sans-serif',
+    width: '320px',
+    boxShadow: '0 6px 24px rgba(0,0,0,0.4)',
+    borderRadius: '10px',
+    overflow: 'hidden'
+  });
+
+  container.innerHTML = `
+    <div style="background:#2c3e50;color:#fff;padding:10px;display:flex;align-items:center;justify-content:space-between;cursor:grab;">
+      <strong style="font-size:14px">🤖 AutoResponder</strong>
+      <div style="display:flex;gap:8px">
+        <button id="ar_minBtn" title="Minimizar" style="background:#34495e;border:none;color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer">—</button>
+        <button id="ar_closeBtn" title="Fechar" style="background:#e74c3c;border:none;color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer">✕</button>
       </div>
-    `;
-    document.body.appendChild(overlay);
+    </div>
+    <div style="background:#fff;color:#333;padding:12px" id="ar_body">
+      <div id="ar_status" style="margin-bottom:10px;color:#333">Aguardando...</div>
+      <button id="ar_start" style="width:100%;padding:8px;border-radius:6px;border:none;background:#27ae60;color:#fff;font-weight:700;cursor:pointer">▶️ Iniciar Automação</button>
+      <button id="ar_stop" style="width:100%;padding:8px;border-radius:6px;border:none;background:#e67e22;color:#fff;font-weight:700;cursor:pointer;display:none;margin-top:8px">⏹️ Parar</button>
+    </div>
+  `;
+  document.body.appendChild(container);
 
-    const statusDiv = overlay.querySelector('#status');
-    const iniciarBtn = overlay.querySelector('#iniciarBtn');
-    const pararBtn = overlay.querySelector('#pararBtn');
-    const fecharBtn = overlay.querySelector('#fecharBtn');
+  // draggable
+  (function makeDraggable(el) {
+    const header = el.querySelector('div:first-child');
+    let dragging = false, ox = 0, oy = 0;
+    header.addEventListener('mousedown', e => {
+      if (e.target.tagName === 'BUTTON') return; // não arrasta quando clica nos botões
+      dragging = true;
+      ox = e.clientX - el.getBoundingClientRect().left;
+      oy = e.clientY - el.getBoundingClientRect().top;
+      header.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      el.style.left = (e.clientX - ox) + 'px';
+      el.style.top = (e.clientY - oy) + 'px';
+      el.style.right = 'auto';
+    });
+    document.addEventListener('mouseup', () => {
+      dragging = false;
+      header.style.cursor = 'grab';
+    });
+  })(container);
 
-    fecharBtn.addEventListener('click', () => overlay.remove());
+  const statusEl = container.querySelector('#ar_status');
+  const startBtn = container.querySelector('#ar_start');
+  const stopBtn = container.querySelector('#ar_stop');
+  const closeBtn = container.querySelector('#ar_closeBtn');
+  const minBtn = container.querySelector('#ar_minBtn');
+  const bodyEl = container.querySelector('#ar_body');
 
-    let observando = false, ultimoNumeroQuestao = null;
+  closeBtn.addEventListener('click', ()=> { try { container.remove(); } catch(e){} });
+  minBtn.addEventListener('click', ()=> {
+    if (bodyEl.style.display === 'none') bodyEl.style.display = '';
+    else bodyEl.style.display = 'none';
+  });
 
-    function atualizarStatus(txt, cor="#ecf0f1") {
-      statusDiv.innerHTML = txt;
-      statusDiv.style.color = cor;
-    }
+  function setStatus(txt, color = '#333') {
+    statusEl.textContent = txt;
+    statusEl.style.color = color;
+  }
 
-    function clicarProximo() {
-      const btn = [...document.querySelectorAll("button,a")].find(b =>
-        /pr[oó]xima?|avan[cç]ar|continuar|seguinte|prosseguir|salvar/i.test(b.textContent.trim())
-      );
-      if (btn) {
-        btn.scrollIntoView({behavior:"smooth", block:"center"});
-        setTimeout(()=>btn.click(),300);
+  // ====== LOGICA PRINCIPAL ======
+  let observing = false;
+  let lastQuestionNumber = null;
+  let observer = null;
+  let checkInterval = null;
+  let debounceTimer = null;
+
+  function clicarElemento(el) {
+    try {
+      if (!el) return false;
+      // prefer inputs
+      const input = el.querySelector('input[type="radio"], input[type="checkbox"]');
+      if (input && !input.disabled) {
+        input.click();
+        return true;
       }
+      // anchors / buttons inside
+      const bt = el.querySelector('button, a');
+      if (bt) { bt.click(); return true; }
+      // try clicking the element itself
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.dispatchEvent(new MouseEvent('mouseover', {bubbles:true}));
+      el.click();
+      return true;
+    } catch (e) {
+      try { el.click(); return true; } catch (e2) { return false; }
     }
+  }
 
-    function responderPeloTexto() {
-      const numEl = [...document.querySelectorAll("*")].find(el => /questão\s*(\d+)/i.test(el.textContent));
-      if (!numEl) return;
-      const numero = parseInt(numEl.textContent.match(/questão\s*(\d+)/i)[1]);
-      if (numero === ultimoNumeroQuestao) return;
-      ultimoNumeroQuestao = numero;
+  function findOptionByImageUrl(elList, urlNormalized) {
+    for (const el of elList) {
+      try {
+        const imgs = el.querySelectorAll ? el.querySelectorAll('img') : [];
+        for (const img of imgs) {
+          if (!img.src) continue;
+          if (normalizar(img.src).includes(urlNormalized) || normalizar(img.getAttribute('data-src')||'').includes(urlNormalized)) {
+            if (isVisible(el)) return el;
+          }
+        }
+      } catch (e){}
+    }
+    return null;
+  }
 
-      const questao = gabarito.find(q=>q.questao_numero===numero);
-      if (!questao) return atualizarStatus(`⚠️ Q${numero} não no gabarito`,"#e67e22");
+  function findOptionByText(elList, textNormalized) {
+    for (const el of elList) {
+      try {
+        if (!el.textContent) continue;
+        if (!isVisible(el)) continue;
+        const nt = normalizar(el.textContent);
+        if (nt.includes(textNormalized) || textNormalized.includes(nt)) {
+          return el;
+        }
+      } catch (e){}
+    }
+    return null;
+  }
 
-      const correta = normalizar(questao.alternativa_correta);
-      const candidatos = [...document.querySelectorAll("*")].filter(el=> el.textContent && normalizar(el.textContent).includes(correta));
+  function gatherCandidates() {
+    // seletor amplo mas não brutal
+    const selector = 'label, .option, .alternativa, .answer, li, div, p, span, button, td';
+    return Array.from(document.querySelectorAll(selector));
+  }
 
-      if (candidatos.length) {
-        let alvo = candidatos[0];
-        while (alvo && alvo.tagName!=="LABEL") alvo=alvo.parentElement;
-        if(!alvo) alvo=candidatos[0];
-        alvo.scrollIntoView({behavior:"smooth", block:"center"});
-        setTimeout(()=>{
-          const input = alvo.querySelector('input[type="radio"],input[type="checkbox"]');
-          if(input && !input.disabled) input.click(); else alvo.click();
-          atualizarStatus(`✅ Questão ${numero} respondida!`,"#27ae60");
-          setTimeout(clicarProximo,1000);
-        },800);
+  function getQuestionNumberFromPage() {
+    // Busca texto que contenha "questão X" (case-insensitive)
+    try {
+      const all = Array.from(document.querySelectorAll('h1,h2,h3,h4,div,p,span,label,section'));
+      for (const el of all) {
+        if (!el.textContent) continue;
+        const m = el.textContent.match(/quest[ãa]o[\s:\-]*?(\d{1,3})/i);
+        if (m) return parseInt(m[1], 10);
+      }
+      // fallback: procurar "Questão" em qualquer elemento
+      const any = Array.from(document.querySelectorAll('*'));
+      for (const el of any) {
+        if (!el.textContent) continue;
+        const m = el.textContent.match(/quest[ãa]o[\s:\-]*?(\d{1,3})/i);
+        if (m) return parseInt(m[1], 10);
+      }
+      return null;
+    } catch (e) { return null; }
+  }
+
+  function attemptAnswer() {
+    try {
+      const qnum = getQuestionNumberFromPage();
+      if (!qnum) { setStatus('❌ Não identifiquei número da questão na página.'); return; }
+      if (qnum === lastQuestionNumber) return;
+      lastQuestionNumber = qnum;
+      setStatus(`🔎 Detectei questão ${qnum} — procurando no gabarito...`, '#1f618d');
+
+      const qObj = gabarito.find(x => x.questao_numero === qnum);
+      if (!qObj) { setStatus(`⚠️ Questão ${qnum} não está no gabarito.`, '#e67e22'); setTimeout(tryNext, 800); return; }
+
+      const raw = qObj.alternativa_correta || '';
+      const isImagem = /^\[IMAGEM\]\s*/i.test(raw);
+      const textToMatch = isImagem ? normalizar(raw.replace(/^\[IMAGEM\]\s*/i, '')) : normalizar(raw);
+
+      const candidates = gatherCandidates();
+
+      let alvo = null;
+      if (isImagem) {
+        // tenta achar por <img src> que contenha a url/base64
+        alvo = findOptionByImageUrl(candidates, textToMatch);
+        if (!alvo) {
+          // também tenta por texto (algumas plataformas mostram a URL como texto)
+          alvo = findOptionByText(candidates, textToMatch);
+        }
       } else {
-        atualizarStatus(`⚠️ Alternativa não encontrada Q${numero}`,"#e67e22");
-        setTimeout(clicarProximo,1000);
+        alvo = findOptionByText(candidates, textToMatch);
       }
+
+      if (!alvo) {
+        setStatus(`⚠️ Alternativa não encontrada na tela para Q${qnum}. (tentando pular)`, '#e67e22');
+        setTimeout(tryNext, 700);
+        return;
+      }
+
+      // se o alvo for um filho, sobe até o label ou container clicável
+      let clickable = alvo;
+      let climb = 0;
+      while (clickable && climb < 6 && !['LABEL','LI','BUTTON','A','DIV','P','SPAN','TD'].includes(clickable.tagName)) {
+        clickable = clickable.parentElement;
+        climb++;
+      }
+      if (!clickable) clickable = alvo;
+
+      // tenta clicar
+      const ok = clicarElemento(clickable || alvo);
+      if (ok) {
+        setStatus(`✅ Respondido Q${qnum}.`, '#27ae60');
+        setTimeout(tryNext, 900);
+      } else {
+        setStatus(`❌ Falha ao clicar Q${qnum}. Tentando clicar direto no texto...`, '#c0392b');
+        clicarElemento(alvo);
+        setTimeout(tryNext, 900);
+      }
+    } catch (err) {
+      console.error('autoResponder erro:', err);
+      setStatus('❌ Erro interno (veja console).', '#c0392b');
     }
+  }
 
-    function iniciar() {
-      if(observando) return;
-      observando=true; iniciarBtn.style.display="none"; pararBtn.style.display="block";
-      responderPeloTexto();
-      const observer = new MutationObserver(()=>{ if(observando) responderPeloTexto(); });
-      observer.observe(document.body,{childList:true,subtree:true,attributes:true,characterData:true});
-      overlay.observer=observer;
-      overlay.intervalo=setInterval(()=>{ if(observando) responderPeloTexto(); },2000);
-    }
+  function tryNext() {
+    try {
+      const nextBtn = Array.from(document.querySelectorAll('button,a,div')).find(b => {
+        if (!b.textContent) return false;
+        return /pr[oó]xima?|avan[cç]ar|continuar|seguinte|prosseguir|salvar|próximo/i.test(b.textContent.trim());
+      });
+      if (nextBtn) {
+        nextBtn.scrollIntoView({behavior:'smooth', block:'center'});
+        setTimeout(()=>{ try { nextBtn.click(); } catch(e){} }, 250);
+      }
+    } catch (e) {}
+  }
 
-    function parar() {
-      observando=false; iniciarBtn.style.display="block"; pararBtn.style.display="none";
-      if(overlay.observer) overlay.observer.disconnect();
-      if(overlay.intervalo) clearInterval(overlay.intervalo);
-      atualizarStatus("⏹️ Automação parada.");
-    }
+  // debounce wrapper pro observer
+  function scheduleAttempt() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => attemptAnswer(), 250);
+  }
 
-    iniciarBtn.addEventListener('click', iniciar);
-    pararBtn.addEventListener('click', parar);
+  function startAutomation() {
+    if (observing) return;
+    observing = true;
+    startBtn.style.display = 'none';
+    stopBtn.style.display = 'block';
+    setStatus('▶️ Automação iniciada.', '#27ae60');
+    // roda imediatamente
+    scheduleAttempt();
+    // observer
+    observer = new MutationObserver(scheduleAttempt);
+    observer.observe(document.body, {childList:true, subtree:true, attributes:true, characterData:true});
+    // backup interval
+    checkInterval = setInterval(scheduleAttempt, 2000);
+    container._observer = observer;
+    container._interval = checkInterval;
+  }
 
-    atualizarStatus("✅ Sistema carregado. Clique em 'Iniciar'.","#27ae60");
+  function stopAutomation() {
+    observing = false;
+    startBtn.style.display = '';
+    stopBtn.style.display = 'none';
+    setStatus('⏹️ Automação parada.');
+    if (observer) { observer.disconnect(); observer = null; }
+    if (checkInterval) { clearInterval(checkInterval); checkInterval = null; }
+  }
+
+  startBtn.addEventListener('click', startAutomation);
+  stopBtn.addEventListener('click', stopAutomation);
+
+  // limpinho: evita duplicar painel se já existe
+  if (document.querySelectorAll('#autoResponderContainer_v1').length > 1) {
+    setStatus('Painel duplicado detectado — removendo o novo.');
+    container.remove();
+    return;
+  }
+
+  setTimeout(()=> setStatus("✅ Sistema pronto. Aperte 'Iniciar Automação'."), 80);
+
 })();
